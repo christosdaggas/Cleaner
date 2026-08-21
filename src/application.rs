@@ -189,19 +189,13 @@ impl DataCleanerApplication {
     fn setup_tray(&self) {
         // Rasterised here, on the GTK main thread, because it goes through
         // gdk-pixbuf. The tray thread only ever receives finished pixels.
-        let style_manager = adw::StyleManager::default();
+        //
+        // The glyph colour is fixed to the panel foreground rather than the
+        // application's colour scheme — see TRAY_FOREGROUND in tray.rs — so
+        // there is nothing to re-render when the desktop switches light/dark.
         let (cmd_tx, action_rx, status_rx) =
-            crate::tray::start_tray_service(crate::tray::render_tray_icons(style_manager.is_dark()));
+            crate::tray::start_tray_service(crate::tray::render_tray_icons());
         *self.imp().tray_cmd.borrow_mut() = Some(cmd_tx.clone());
-
-        // The tray pixmap is pre-rendered, so it cannot follow the panel on its
-        // own the way a host-resolved symbolic icon would. Re-render it on every
-        // light/dark switch to keep the glyph legible against the panel.
-        let theme_cmd_tx = cmd_tx.clone();
-        style_manager.connect_dark_notify(move |style_manager| {
-            let icons = crate::tray::render_tray_icons(style_manager.is_dark());
-            let _ = theme_cmd_tx.try_send(crate::tray::TrayCmd::SetIcons(icons));
-        });
 
         let app_weak = self.downgrade();
         glib::spawn_future_local(async move {

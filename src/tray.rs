@@ -13,11 +13,11 @@
 //! `icon_theme_path` remain as a secondary path for hosts that prefer to
 //! resolve — and recolour — a themed icon themselves.
 //!
-//! Because the pixmap is pre-rendered, its colour has to be chosen by us: the
-//! SVG paints with `currentColor`, and [`render_tray_icons`] substitutes the
-//! light or dark foreground before rasterising. `application.rs` re-renders and
-//! pushes a new set whenever libadwaita reports a colour-scheme change, so the
-//! tray glyph stays legible on both light and dark panels.
+//! Because the pixmap is pre-rendered, its colour has to be chosen by us. It is
+//! fixed to the panel foreground rather than the application's colour scheme —
+//! see [`TRAY_FOREGROUND`] for why keying it off `StyleManager::is_dark()` was
+//! wrong. Hosts that resolve `icon_name` recolour the icon themselves via the
+//! `currentColor` markup in the SVG.
 
 use ksni::menu::{MenuItem, StandardItem};
 use ksni::{Tray, TrayMethods};
@@ -31,15 +31,20 @@ const TRAY_SVG: &str =
 /// of rescaling a single bitmap.
 const TRAY_SIZES: [i32; 6] = [16, 22, 24, 32, 48, 64];
 
-/// The placeholder colour written into the symbolic SVG; every occurrence is
-/// swapped for the active theme's foreground before rasterising.
-const SVG_PLACEHOLDER_FG: &str = "#ffffff";
-
-/// Foreground for dark panels (the SVG ships in this state).
-const DARK_PANEL_FG: &str = "#ffffff";
-
-/// Foreground for light panels — Adwaita's dark text colour.
-const LIGHT_PANEL_FG: &str = "#2e3436";
+/// Foreground the tray pixmap is rasterised with.
+///
+/// Deliberately fixed rather than derived from the application's colour scheme.
+/// A StatusNotifier panel is not the application window: GNOME's top bar and
+/// KDE's default panel are dark whether or not the desktop is in light mode, so
+/// keying the glyph off `StyleManager::is_dark()` painted a dark icon onto a
+/// dark panel. It was also read during `startup()`, before libadwaita had
+/// settled the scheme, so it reported light on a dark desktop and never
+/// corrected itself because no scheme change followed.
+///
+/// Hosts that resolve `icon_name` instead still recolour the icon themselves —
+/// that is what the `currentColor` markup in the SVG is for. This constant only
+/// governs the pixmap we hand to hosts that do not.
+const TRAY_FOREGROUND: &str = "#ffffff";
 
 #[derive(Debug, Clone, Copy)]
 pub enum TrayAction {
@@ -77,10 +82,9 @@ impl DataCleanerTray {
     }
 }
 
-/// The symbolic SVG with its `currentColor` source recoloured for the panel.
-fn themed_svg(dark: bool) -> String {
-    let foreground = if dark { DARK_PANEL_FG } else { LIGHT_PANEL_FG };
-    TRAY_SVG.replace(SVG_PLACEHOLDER_FG, foreground)
+/// The symbolic SVG resolved to the panel foreground.
+fn panel_svg() -> String {
+    TRAY_SVG.replace("#ffffff", TRAY_FOREGROUND)
 }
 
 /// Rasterise the symbolic icon at `size`×`size` into the `IconPixmap` wire
@@ -130,10 +134,10 @@ fn render_icon(svg: &[u8], size: i32) -> Option<ksni::Icon> {
     })
 }
 
-/// Rasterise the tray artwork for the current colour scheme, at every size a
-/// host might ask for. Call this on the GTK main thread — it uses gdk-pixbuf.
-pub fn render_tray_icons(dark: bool) -> Vec<ksni::Icon> {
-    let svg = themed_svg(dark);
+/// Rasterise the tray artwork at every size a host might ask for. Call this on
+/// the GTK main thread — it uses gdk-pixbuf.
+pub fn render_tray_icons() -> Vec<ksni::Icon> {
+    let svg = panel_svg();
     TRAY_SIZES
         .iter()
         .filter_map(|&size| render_icon(svg.as_bytes(), size))
@@ -354,17 +358,15 @@ mod tests {
     }
 
     #[test]
-    fn theme_substitution_swaps_every_placeholder() {
-        let light = themed_svg(false);
-        assert!(light.contains(LIGHT_PANEL_FG));
+    fn tray_glyph_is_panel_foreground_not_app_theme() {
+        // Regression: the glyph used to follow StyleManager::is_dark(), which
+        // painted a dark icon onto GNOME's always-dark top bar.
+        let svg = panel_svg();
+        assert!(svg.contains(TRAY_FOREGROUND));
         assert!(
-            !light.contains(SVG_PLACEHOLDER_FG),
-            "a leftover white source colour would stay invisible on a light panel"
+            !svg.contains("#2e3436"),
+            "the tray glyph must not be rendered in a dark app-theme foreground"
         );
-
-        let dark = themed_svg(true);
-        assert!(dark.contains(DARK_PANEL_FG));
-        assert_eq!(dark, TRAY_SVG, "the SVG already ships in its dark state");
     }
 
     /// The colour the glyph is actually painted with: the first pixel whose
@@ -377,32 +379,28 @@ mod tests {
     }
 
     #[test]
-    fn rasterised_tray_icon_follows_the_colour_scheme() {
-        let dark = render_tray_icons(true);
-        let light = render_tray_icons(false);
+    fn rasterised_tray_icon_is_drawn_in_the_panel_foreground() {
+        let icons = render_tray_icons();
 
         // No SVG loader (librsvg) on this machine: the tray falls back to
         // `icon_name` and there is nothing to assert about pixels.
-        if dark.is_empty() || light.is_empty() {
+        if icons.is_empty() {
             eprintln!("skipped: gdk-pixbuf has no SVG loader");
             return;
         }
 
-        assert_eq!(dark.len(), TRAY_SIZES.len());
-        assert_eq!(light.len(), TRAY_SIZES.len());
-        for (icon, &size) in dark.iter().zip(TRAY_SIZES.iter()) {
+        assert_eq!(icons.len(), TRAY_SIZES.len());
+        for (icon, &size) in icons.iter().zip(TRAY_SIZES.iter()) {
             assert_eq!((icon.width, icon.height), (size, size));
             assert_eq!(icon.data.len(), (size * size * 4) as usize);
         }
 
-        let on_dark = first_opaque_pixel(&dark[0]).expect("dark icon draws something");
-        let on_light = first_opaque_pixel(&light[0]).expect("light icon draws something");
-
-        assert_eq!(on_dark, (0xff, 0xff, 0xff), "dark panels get a white glyph");
-        assert_eq!(on_light, (0x2e, 0x34, 0x36), "light panels get a dark glyph");
-        assert_ne!(
-            on_dark, on_light,
-            "the tray pixmap must differ between colour schemes"
+        let drawn = first_opaque_pixel(&icons[0]).expect("icon draws something");
+        assert_eq!(
+            drawn,
+            (0xff, 0xff, 0xff),
+            "the tray glyph must be white; a dark glyph disappears on GNOME's \
+             always-dark top bar"
         );
     }
 

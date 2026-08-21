@@ -1,4 +1,5 @@
 use crate::models::SystemRuleType;
+use crate::services::{build_plan, detect_manager, removal_command};
 use crate::storage::Storage;
 use gtk4::prelude::*;
 use gtk4::subclass::prelude::*;
@@ -18,6 +19,10 @@ mod imp {
     pub struct SystemPage {
         pub storage: RefCell<Option<Arc<Storage>>>,
         pub operation_running: Cell<bool>,
+        /// How many kernel versions the user wants preserved. Read by
+        /// `clean_old_kernels`; the running and newest kernels are protected on
+        /// top of this regardless of the value.
+        pub kernels_to_keep: Cell<u32>,
     }
 
     #[glib::object_subclass]
@@ -46,6 +51,9 @@ impl SystemPage {
             .build();
 
         page.imp().storage.replace(Some(storage));
+        // Two kernels is the distribution default almost everywhere: the one
+        // you booted and the one you fall back to.
+        page.imp().kernels_to_keep.set(2);
         page.setup_ui();
         page
     }
@@ -155,19 +163,47 @@ impl SystemPage {
         group.set_title("System-Level Cleanup");
         group.set_description(Some("These operations require root access"));
 
-        // Generic autoremove is not kernel cleanup: it can remove unrelated
-        // dependency packages and cannot honor a requested kernel count. Keep
-        // this explicitly unavailable until each supported distribution has a
-        // package-list preview and a kernel-specific removal implementation.
-        let kernels_row = adw::ActionRow::new();
-        kernels_row.set_title("Old Kernel Cleanup");
-        kernels_row.set_subtitle(
-            "Unavailable: use your distribution's kernel management tools so unrelated packages are never removed",
-        );
+        // Kernel removal is done by explicit package name, never via a blanket
+        // `autoremove`: autoremove takes out every package nothing currently
+        // depends on and has no concept of a kernel count. See
+        // services/kernel_cleanup.rs.
+        let kernels_expander = adw::ExpanderRow::new();
+        kernels_expander.set_title("Old Kernels");
+        kernels_expander.set_subtitle("Remove superseded kernel versions");
         let kernel_icon = gtk4::Image::from_icon_name("computer-symbolic");
         kernel_icon.set_pixel_size(24);
-        kernels_row.add_prefix(&kernel_icon);
-        group.add(&kernels_row);
+        kernels_expander.add_prefix(&kernel_icon);
+
+        let kernels_spin_row = adw::ActionRow::new();
+        kernels_spin_row.set_title("Kernels to Keep");
+        kernels_spin_row.set_subtitle("The running and newest kernels are always kept");
+
+        let kernels_spin = gtk4::SpinButton::with_range(1.0, 10.0, 1.0);
+        kernels_spin.set_digits(0);
+        kernels_spin.set_value(self.imp().kernels_to_keep.get() as f64);
+        kernels_spin.set_valign(gtk4::Align::Center);
+        let page = self.clone();
+        kernels_spin.connect_value_changed(move |spin| {
+            page.imp().kernels_to_keep.set(spin.value() as u32);
+        });
+        kernels_spin_row.add_suffix(&kernels_spin);
+        kernels_expander.add_row(&kernels_spin_row);
+
+        let clean_kernels_row = adw::ActionRow::new();
+        clean_kernels_row.set_title("Clean Old Kernels");
+        clean_kernels_row.set_subtitle("Lists exactly what will be removed before asking (requires pkexec)");
+
+        let clean_kernels_btn = gtk4::Button::with_label("Clean");
+        clean_kernels_btn.add_css_class("suggested-action");
+        clean_kernels_btn.set_valign(gtk4::Align::Center);
+        let page = self.clone();
+        clean_kernels_btn.connect_clicked(move |btn| {
+            page.clean_old_kernels(btn);
+        });
+        clean_kernels_row.add_suffix(&clean_kernels_btn);
+        kernels_expander.add_row(&clean_kernels_row);
+
+        group.add(&kernels_expander);
 
         let cache_expander = adw::ExpanderRow::new();
         cache_expander.set_title("Package Manager Cache");
@@ -252,6 +288,9 @@ impl SystemPage {
         group.add(&cache_expander);
 
         let pkexec_available = find_system_command("pkexec").is_some();
+        clean_kernels_btn.set_sensitive(
+            pkexec_available && detect_manager().is_some(),
+        );
         clean_apt_btn.set_sensitive(pkexec_available && find_system_command("apt-get").is_some());
         clean_dnf_btn.set_sensitive(pkexec_available && find_system_command("dnf").is_some());
         clean_pacman_btn.set_sensitive(pkexec_available && find_system_command("pacman").is_some());
@@ -390,6 +429,28 @@ impl SystemPage {
                 }
             }
         });
+    }
+
+    /// Build a removal plan, show the user exactly which packages it covers,
+    /// and only then ask for administrator approval. Nothing is executed if the
+    /// plan is empty — several package managers treat an empty package list as
+    /// "operate on everything".
+    fn clean_old_kernels(&self, button: &gtk4::Button) {
+        let keep = self.imp().kernels_to_keep.get();
+        let plan = match build_plan(keep) {
+            Ok(plan) => plan,
+            Err(error) => {
+                self.show_command_result("Kernel Cleanup Failed", &error, "");
+                return;
+            }
+        };
+
+        let Some(args) = removal_command(&plan) else {
+            self.show_command_result("Nothing to Remove", &plan.summary(), "");
+            return;
+        };
+
+        self.request_root_command(button, "Kernel Cleanup Failed", &plan.summary(), args);
     }
 
     fn clean_apt_cache(&self, button: &gtk4::Button) {

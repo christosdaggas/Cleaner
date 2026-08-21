@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.chrisdaggas.datacleaner</id>
+
+  <name>Data Cleaner</name>
+  <summary>Safely clean browser data, caches, and temporary files</summary>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <developer id="com.chrisdaggas">
+    <name>Christos A. Daggas</name>
+  </developer>
+
+  <!-- Provides link to desktop file for app store detection -->
+  <provides>
+    <binary>data-cleaner</binary>
+    <id>com.chrisdaggas.datacleaner.desktop</id>
+  </provides>
+
+  <description>
+    <p>
+      Data Cleaner is a native GNOME application that helps you safely reclaim
+      disk space by cleaning browser data, application caches, temporary files,
+      and user-defined directories.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Browser cleanup: Clear cache, history, and cookies from Firefox, Chrome, Chromium, Brave, and Edge</li>
+      <li>Application caches: Clean caches from package managers and applications</li>
+      <li>Custom directories: Add your own cleanup rules with file patterns and age filters</li>
+      <li>System cleanup: Clear temporary files, thumbnails, and trash</li>
+      <li>Safe by design: Preview before deleting, hard-coded protection for critical paths</li>
+    </ul>
+    <p>
+      Data Cleaner prioritizes safety and transparency. Manual cleanups are previewed,
+      automatic cleanups require explicit opt-in, and critical system paths are protected
+      by a hard-coded denylist.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">com.chrisdaggas.datacleaner.desktop</launchable>
+
+  <url type="homepage">https://chrisdaggas.com</url>
+  <url type="bugtracker">https://github.com/christosdaggas/Cleaner/issues</url>
+
+  <content_rating type="oars-1.1" />
+
+  <branding>
+    <color type="primary" scheme_preference="light">#62a0ea</color>
+    <color type="primary" scheme_preference="dark">#1c71d8</color>
+  </branding>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>The main dashboard showing reclaimable space</caption>
+      <image>https://chrisdaggas.com/cleaner/screenshots/dashboard.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Browser cleanup options</caption>
+      <image>https://chrisdaggas.com/cleaner/screenshots/browsers.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Custom directory rules</caption>
+      <image>https://chrisdaggas.com/cleaner/screenshots/custom.png</image>
+    </screenshot>
+  </screenshots>
+
+  <releases>
+    <release version="1.0.0" date="2026-08-21">
+      <description>
+        <p>Initial public release of Data Cleaner.</p>
+        <ul>
+          <li>Modern GNOME interface with light and dark themes, system accent colors, high contrast, and reduced motion support</li>
+          <li>Dashboard storage overview for used, available, total, and reclaimable disk space</li>
+          <li>Safe browser, application cache, system, custom directory, application log, and system journal cleanup</li>
+          <li>Scheduled automatic cleanup with multiple selected days, local time, and optional start at login</li>
+          <li>Lightweight visual Storage Analyzer for finding large files and folders and moving selections to Trash</li>
+          <li>In-app cleanup log showing deleted, skipped, and failed items after every cleanup</li>
+          <li>System tray integration with an adaptive symbolic icon and quick cleanup actions</li>
+          <li>Startup update check with access to the latest verified GitHub release</li>
+          <li>Critical-path protection, safety limits, symlink controls, previews, and running-browser checks</li>
+          <li>English, Greek, Italian, Spanish, German, and French interfaces with automatic language detection</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
+
+  <recommends>
+    <control>keyboard</control>
+    <control>pointing</control>
+    <control>touch</control>
+  </recommends>
+
+  <keywords>
+    <keyword>clean</keyword>
+    <keyword>cleaner</keyword>
+    <keyword>cache</keyword>
+    <keyword>browser</keyword>
+    <keyword>temporary</keyword>
+    <keyword>junk</keyword>
+    <keyword>disk</keyword>
+    <keyword>space</keyword>
+    <keyword>storage</keyword>
+  </keywords>
+
+  <categories>
+    <category>System</category>
+    <category>Utility</category>
+    <category>FileTools</category>
+  </categories>
+
+</component>

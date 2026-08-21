@@ -1,0 +1,336 @@
+# Chinese (Simplified) translation for Cleaner
+# Copyright (C) 2024-2026 Christos A. Daggas
+# This file is distributed under the same license as the data-cleaner package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: data-cleaner 1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/christosdaggas/Cleaner/issues\n"
+"POT-Creation-Date: 2026-01-14 12:00+0000\n"
+"PO-Revision-Date: 2026-01-14 12:00+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: Chinese (Simplified)\n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. Application name
+#: src/main.rs
+msgid "Linux Cleaner"
+msgstr "Linux 清理工具"
+
+#. Application description
+#: src/application.rs
+msgid "A safe and transparent Linux system cleaner"
+msgstr "一款安全透明的 Linux 系统清理工具"
+
+#. About dialog
+#: src/application.rs
+msgid "About"
+msgstr "关于"
+
+#: src/application.rs
+msgid "Preferences"
+msgstr "首选项"
+
+#: src/application.rs
+msgid "Quit"
+msgstr "退出"
+
+#. Navigation items
+#: src/ui/main_window.rs
+msgid "Dashboard"
+msgstr "仪表板"
+
+#: src/ui/main_window.rs
+msgid "Browsers"
+msgstr "浏览器"
+
+#: src/ui/main_window.rs
+msgid "Applications"
+msgstr "应用程序"
+
+#: src/ui/main_window.rs
+msgid "Custom Directories"
+msgstr "自定义目录"
+
+#: src/ui/main_window.rs
+msgid "System"
+msgstr "系统"
+
+#: src/ui/main_window.rs
+msgid "Settings"
+msgstr "设置"
+
+#: src/ui/main_window.rs
+msgid "Diagnostics"
+msgstr "诊断"
+
+#: src/ui/main_window.rs
+msgid "Help"
+msgstr "帮助"
+
+#: src/ui/main_window.rs
+msgid "Show sidebar"
+msgstr "显示侧边栏"
+
+#: src/ui/main_window.rs
+msgid "Hide sidebar"
+msgstr "隐藏侧边栏"
+
+#: src/ui/main_window.rs
+msgid "Main Menu"
+msgstr "主菜单"
+
+#: src/ui/main_window.rs
+msgid "Cleaner"
+msgstr "清理工具"
+
+#. Theme selector
+#: src/ui/main_window.rs
+msgid "Light"
+msgstr "浅色"
+
+#: src/ui/main_window.rs
+msgid "Dark"
+msgstr "深色"
+
+#. Dashboard page
+#: src/ui/dashboard_page.rs
+msgid "Safe and transparent system cleaning"
+msgstr "安全透明的系统清理"
+
+#: src/ui/dashboard_page.rs
+msgid "Reclaimable Space"
+msgstr "可回收空间"
+
+#: src/ui/dashboard_page.rs
+msgid "Enabled Targets"
+msgstr "已启用目标"
+
+#: src/ui/dashboard_page.rs
+msgid "Last Cleanup"
+msgstr "上次清理"
+
+#: src/ui/dashboard_page.rs
+msgid "Never"
+msgstr "从未"
+
+#: src/ui/dashboard_page.rs
+msgid "Start Cleanup"
+msgstr "开始清理"
+
+#: src/ui/dashboard_page.rs
+msgid "Scan and clean enabled targets. You'll see a preview before anything is deleted."
+msgstr "扫描并清理已启用的目标。在删除任何内容之前，您将看到预览。"
+
+#: src/ui/dashboard_page.rs
+msgid "Scan for Files"
+msgstr "扫描文件"
+
+#: src/ui/dashboard_page.rs
+msgid "Clean Now"
+msgstr "立即清理"
+
+#: src/ui/dashboard_page.rs
+msgid "Scanning..."
+msgstr "正在扫描..."
+
+#: src/ui/dashboard_page.rs
+msgid "Click 'Scan' to check"
+msgstr "点击“扫描”进行检查"
+
+#. Browsers page
+#: src/ui/browsers_page.rs
+msgid "Browser Cleanup"
+msgstr "浏览器清理"
+
+#: src/ui/browsers_page.rs
+msgid "Select which browser data to clean. Cache is safe to delete, but cookies and history are permanent."
+msgstr "选择要清理的浏览器数据。缓存可以安全删除，但 Cookie 和历史记录是永久性的。"
+
+#: src/ui/browsers_page.rs
+msgid "Installed"
+msgstr "已安装"
+
+#: src/ui/browsers_page.rs
+msgid "Not detected"
+msgstr "未检测到"
+
+#. Browser data types
+#: src/ui/browsers_page.rs
+msgid "Cache"
+msgstr "缓存"
+
+#: src/ui/browsers_page.rs
+msgid "Cookies"
+msgstr "Cookie"
+
+#: src/ui/browsers_page.rs
+msgid "History"
+msgstr "历史记录"
+
+#: src/ui/browsers_page.rs
+msgid "Sessions"
+msgstr "会话"
+
+#. Applications page
+#: src/ui/applications_page.rs
+msgid "Application Caches"
+msgstr "应用程序缓存"
+
+#: src/ui/applications_page.rs
+msgid "Clean caches from package managers and applications. These are safe to delete but may slow down first runs."
+msgstr "清理包管理器和应用程序的缓存。这些可以安全删除，但可能会减慢首次运行速度。"
+
+#. System page
+#: src/ui/system_page.rs
+msgid "System Cleanup"
+msgstr "系统清理"
+
+#: src/ui/system_page.rs
+msgid "Clean system-level temporary files and caches. Some options require administrator privileges."
+msgstr "清理系统级临时文件和缓存。某些选项需要管理员权限。"
+
+#. Settings page
+#: src/ui/settings_page.rs
+msgid "General"
+msgstr "常规"
+
+#: src/ui/settings_page.rs
+msgid "Confirm Before Cleaning"
+msgstr "清理前确认"
+
+#: src/ui/settings_page.rs
+msgid "Show a confirmation dialog before deleting files"
+msgstr "删除文件前显示确认对话框"
+
+#: src/ui/settings_page.rs
+msgid "Show Cleanup Summary"
+msgstr "显示清理摘要"
+
+#: src/ui/settings_page.rs
+msgid "Display a summary after cleaning completes"
+msgstr "清理完成后显示摘要"
+
+#: src/ui/settings_page.rs
+msgid "Safety"
+msgstr "安全"
+
+#: src/ui/settings_page.rs
+msgid "These settings help prevent accidental data loss"
+msgstr "这些设置有助于防止意外数据丢失"
+
+#: src/ui/settings_page.rs
+msgid "Maximum Files Per Operation"
+msgstr "每次操作最大文件数"
+
+#: src/ui/settings_page.rs
+msgid "Stop after deleting this many files"
+msgstr "删除此数量的文件后停止"
+
+#: src/ui/settings_page.rs
+msgid "Follow Symlinks"
+msgstr "跟随符号链接"
+
+#: src/ui/settings_page.rs
+msgid "Dangerous: May delete files outside target directories"
+msgstr "危险：可能会删除目标目录之外的文件"
+
+#: src/ui/settings_page.rs
+msgid "Appearance"
+msgstr "外观"
+
+#: src/ui/settings_page.rs
+msgid "Color Scheme"
+msgstr "配色方案"
+
+#. Help page
+#: src/ui/help_page.rs
+msgid "Learn how to use Cleaner"
+msgstr "了解如何使用清理工具"
+
+#: src/ui/help_page.rs
+msgid "About Cleaner"
+msgstr "关于清理工具"
+
+#: src/ui/help_page.rs
+msgid "Cleaner is a system cleaning utility for Linux that helps you free up disk space by removing temporary files, caches, and other unnecessary data."
+msgstr "清理工具是一款 Linux 系统清理工具，通过删除临时文件、缓存和其他不必要的数据来帮助您释放磁盘空间。"
+
+#. Common UI elements
+msgid "Cancel"
+msgstr "取消"
+
+msgid "OK"
+msgstr "确定"
+
+msgid "Yes"
+msgstr "是"
+
+msgid "No"
+msgstr "否"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "Apply"
+msgstr "应用"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Enable"
+msgstr "启用"
+
+msgid "Disable"
+msgstr "禁用"
+
+msgid "Enabled"
+msgstr "已启用"
+
+msgid "Disabled"
+msgstr "已禁用"
+
+msgid "Error"
+msgstr "错误"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "Information"
+msgstr "信息"
+
+msgid "Success"
+msgstr "成功"
+
+#. File size units
+msgid "bytes"
+msgstr "字节"
+
+msgid "KB"
+msgstr "KB"
+
+msgid "MB"
+msgstr "MB"
+
+msgid "GB"
+msgstr "GB"
+
+msgid "TB"
+msgstr "TB"
+
+#. Time-related
+msgid "Today"
+msgstr "今天"
+
+msgid "Yesterday"
+msgstr "昨天"
+
+msgid "days ago"
+msgstr "天前"

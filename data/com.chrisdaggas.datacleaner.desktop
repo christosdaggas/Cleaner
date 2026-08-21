@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Data Cleaner
+Comment=Safely clean browser data, application caches, and temporary files
+Exec=data-cleaner %U
+Icon=com.chrisdaggas.datacleaner
+Terminal=false
+Type=Application
+Categories=Utility;FileTools;GTK;
+Keywords=clean;cleaner;cache;browser;temporary;junk;disk;space;storage;
+StartupNotify=true
+X-GNOME-UsesNotifications=true
+X-Purism-FormFactor=Workstation;Mobile;

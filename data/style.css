@@ -1,0 +1,563 @@
+/* Data Cleaner - Application Styles */
+/* Author: Christos A. Daggas */
+/* https://chrisdaggas.com */
+
+/* ===== Semantic Theme Tokens ===== */
+/* These tokens map to libadwaita semantic roles and stay desktop-neutral. */
+@define-color cleaner_window_bg @window_bg_color;
+@define-color cleaner_window_fg @window_fg_color;
+@define-color cleaner_view_bg @view_bg_color;
+@define-color cleaner_view_fg @view_fg_color;
+@define-color cleaner_headerbar_bg @headerbar_bg_color;
+@define-color cleaner_headerbar_fg @headerbar_fg_color;
+@define-color cleaner_sidebar_bg @sidebar_bg_color;
+@define-color cleaner_sidebar_fg @sidebar_fg_color;
+@define-color cleaner_secondary_sidebar_bg @secondary_sidebar_bg_color;
+@define-color cleaner_secondary_sidebar_fg @secondary_sidebar_fg_color;
+@define-color cleaner_card_bg @card_bg_color;
+@define-color cleaner_card_fg @card_fg_color;
+@define-color cleaner_dialog_bg @dialog_bg_color;
+@define-color cleaner_dialog_fg @dialog_fg_color;
+@define-color cleaner_popover_bg @popover_bg_color;
+@define-color cleaner_popover_fg @popover_fg_color;
+@define-color cleaner_tooltip_bg @popover_bg_color;
+@define-color cleaner_tooltip_fg @popover_fg_color;
+@define-color cleaner_accent_bg @accent_bg_color;
+@define-color cleaner_accent_fg @accent_fg_color;
+@define-color cleaner_accent @accent_color;
+@define-color cleaner_success @success_bg_color;
+@define-color cleaner_warning @warning_bg_color;
+@define-color cleaner_error @error_bg_color;
+@define-color cleaner_destructive @error_bg_color;
+@define-color cleaner_primary_text @view_fg_color;
+@define-color cleaner_secondary_text alpha(@view_fg_color, 0.72);
+@define-color cleaner_border alpha(@window_fg_color, 0.12);
+@define-color cleaner_divider alpha(@window_fg_color, 0.10);
+@define-color cleaner_shade alpha(@window_fg_color, 0.06);
+@define-color cleaner_selection_bg alpha(@accent_bg_color, 0.18);
+@define-color cleaner_selection_fg @view_fg_color;
+@define-color cleaner_button_bg @card_bg_color;
+@define-color cleaner_button_fg @card_fg_color;
+@define-color cleaner_button_border alpha(@window_fg_color, 0.12);
+@define-color cleaner_flat_button_hover alpha(@window_fg_color, 0.08);
+@define-color cleaner_flat_button_pressed alpha(@window_fg_color, 0.12);
+@define-color cleaner_icon_button_fg @window_fg_color;
+@define-color cleaner_text_button_fg @accent_color;
+@define-color cleaner_link_fg @accent_color;
+@define-color cleaner_entry_bg @view_bg_color;
+@define-color cleaner_entry_fg @view_fg_color;
+@define-color cleaner_entry_border alpha(@window_fg_color, 0.14);
+@define-color cleaner_focus_ring alpha(@accent_color, 0.95);
+@define-color cleaner_active_state alpha(@accent_bg_color, 0.16);
+@define-color cleaner_hover_state alpha(@window_fg_color, 0.08);
+@define-color cleaner_pressed_state alpha(@window_fg_color, 0.12);
+@define-color cleaner_overlay_bg alpha(@dialog_bg_color, 0.92);
+/* Shell surfaces sampled from the supplied light and dark references. */
+@define-color cleaner_light_sidebar_surface #ebebed;
+@define-color cleaner_light_content_surface #ffffff;
+@define-color cleaner_dark_sidebar_surface #2e2e32;
+@define-color cleaner_dark_content_surface #343437;
+
+window.data-cleaner-dark,
+window.data-cleaner-light,
+window.background {
+    background-color: @cleaner_window_bg;
+    color: @cleaner_window_fg;
+}
+
+.data-cleaner-window-layout {
+    background-color: @cleaner_window_bg;
+}
+
+.data-cleaner-content,
+.data-cleaner-view,
+.view.data-cleaner-view {
+    background-color: @cleaner_headerbar_bg;
+    color: @cleaner_view_fg;
+}
+
+.data-cleaner-sidebar {
+    background-color: @cleaner_sidebar_bg;
+    color: @cleaner_sidebar_fg;
+}
+
+/* Keep each half of the shell visually continuous from its header down. */
+headerbar.data-cleaner-content-header {
+    background-color: @cleaner_headerbar_bg;
+    border: none;
+    box-shadow: none;
+}
+
+headerbar.data-cleaner-sidebar-header {
+    background-color: @cleaner_sidebar_bg;
+    border: none;
+    box-shadow: none;
+}
+
+/* Match the two-surface shell shown in the visual references. */
+.data-cleaner-light .data-cleaner-sidebar,
+.data-cleaner-light headerbar.data-cleaner-sidebar-header {
+    background-color: @cleaner_light_sidebar_surface;
+}
+
+.data-cleaner-light .data-cleaner-content,
+.data-cleaner-light .data-cleaner-view,
+.data-cleaner-light .view.data-cleaner-view,
+.data-cleaner-light headerbar.data-cleaner-content-header {
+    background-color: @cleaner_light_content_surface;
+}
+
+.data-cleaner-dark .data-cleaner-sidebar,
+.data-cleaner-dark headerbar.data-cleaner-sidebar-header {
+    background-color: @cleaner_dark_sidebar_surface;
+}
+
+.data-cleaner-dark .data-cleaner-content,
+.data-cleaner-dark .data-cleaner-view,
+.data-cleaner-dark .view.data-cleaner-view,
+.data-cleaner-dark headerbar.data-cleaner-content-header {
+    background-color: @cleaner_dark_content_surface;
+}
+
+.navigation-sidebar {
+    background-color: transparent;
+    color: @cleaner_sidebar_fg;
+}
+
+.navigation-sidebar row {
+    margin: 2px 8px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.navigation-sidebar row:hover {
+    background-color: @cleaner_hover_state;
+}
+
+.navigation-sidebar row:selected {
+    background-color: @cleaner_selection_bg;
+    border-color: alpha(@cleaner_focus_ring, 0.22);
+}
+
+.navigation-sidebar row:selected label,
+.navigation-sidebar row:selected image {
+    color: inherit;
+}
+
+.data-cleaner-surface-card {
+    border-color: @cleaner_border;
+    box-shadow: 0 1px 2px alpha(@cleaner_shade, 0.8);
+}
+
+/* Dashboard sections share the workspace surface instead of looking like cards. */
+frame.dashboard-section,
+frame.dashboard-section > border {
+    background-color: transparent;
+    background-image: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.welcome-header {
+    min-height: 120px;
+}
+
+.welcome-title {
+    color: @cleaner_primary_text;
+}
+
+.welcome-subtitle {
+    color: @cleaner_secondary_text;
+}
+
+.welcome-graphic {
+    margin-right: 16px;
+    color: @accent_color;
+}
+
+.disk-storage-card {
+    min-height: 226px;
+}
+
+.cleanup-log-summary {
+    color: @cleaner_secondary_text;
+}
+
+frame.cleanup-log-frame,
+frame.cleanup-log-frame > border {
+    background-color: alpha(@cleaner_window_fg, 0.025);
+    border: 1px solid alpha(@cleaner_window_fg, 0.10);
+    border-radius: 8px;
+}
+
+textview.cleanup-log-view,
+textview.cleanup-log-view text {
+    background-color: transparent;
+    color: @cleaner_primary_text;
+}
+
+.disk-usage-details {
+    min-width: 280px;
+}
+
+.disk-metrics {
+    border-top: 1px solid @cleaner_divider;
+    padding-top: 14px;
+}
+
+.disk-metric-value {
+    font-size: 14pt;
+    font-weight: 700;
+    color: @cleaner_primary_text;
+}
+
+/* ===== Storage Analyzer ===== */
+.storage-analyzer-page {
+    background-color: transparent;
+}
+
+.storage-analyzer-toolbar {
+    min-height: 38px;
+}
+
+.storage-analyzer-summary {
+    min-height: 34px;
+    padding: 0 2px;
+}
+
+frame.storage-treemap-frame,
+frame.storage-treemap-frame > border {
+    background-color: alpha(@cleaner_window_fg, 0.035);
+    border: 1px solid @cleaner_border;
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+.storage-breadcrumbs {
+    min-height: 38px;
+    padding: 2px 0;
+}
+
+button.storage-breadcrumb {
+    min-height: 28px;
+    padding: 2px 7px;
+    border-radius: 6px;
+}
+
+.storage-results-header {
+    min-height: 28px;
+    padding: 0 8px;
+    color: @cleaner_secondary_text;
+    font-size: 9pt;
+    font-weight: 700;
+    border-bottom: 1px solid @cleaner_divider;
+}
+
+.storage-results-scroll {
+    background-color: transparent;
+    border-bottom: 1px solid @cleaner_divider;
+}
+
+.storage-results-list,
+.storage-results-list row {
+    background-color: transparent;
+}
+
+.storage-results-list row.storage-result-row {
+    border-bottom: 1px solid alpha(@cleaner_window_fg, 0.07);
+}
+
+.storage-results-list row.storage-result-row:hover {
+    background-color: @cleaner_hover_state;
+}
+
+progressbar.storage-size-bar {
+    min-height: 7px;
+}
+
+progressbar.storage-size-bar trough {
+    min-height: 7px;
+    border-radius: 999px;
+    background-color: alpha(@cleaner_window_fg, 0.10);
+}
+
+progressbar.storage-size-bar progress {
+    min-height: 7px;
+    border-radius: 999px;
+    background-color: @cleaner_accent_bg;
+}
+
+.storage-selection-bar {
+    min-height: 58px;
+    padding-top: 10px;
+}
+
+.data-cleaner-high-contrast frame.storage-treemap-frame,
+.data-cleaner-high-contrast .storage-results-header,
+.data-cleaner-high-contrast .storage-results-scroll,
+.data-cleaner-high-contrast .storage-results-list row.storage-result-row {
+    border-color: alpha(@cleaner_window_fg, 0.34);
+}
+
+.title-1 {
+    font-size: 24pt;
+    font-weight: 800;
+    color: @cleaner_primary_text;
+}
+
+.title-2 {
+    font-size: 18pt;
+    font-weight: 700;
+    color: @cleaner_primary_text;
+}
+
+.title-3 {
+    font-size: 14pt;
+    font-weight: 600;
+    color: @cleaner_primary_text;
+}
+
+.title-4 {
+    font-size: 12pt;
+    font-weight: 500;
+    color: @cleaner_primary_text;
+}
+
+.heading {
+    font-weight: 600;
+    color: @cleaner_primary_text;
+}
+
+.caption {
+    font-size: 10pt;
+    color: @cleaner_secondary_text;
+}
+
+.dim-label {
+    color: @cleaner_secondary_text;
+}
+
+.success {
+    color: @cleaner_success;
+}
+
+.warning {
+    color: @cleaner_warning;
+}
+
+.error {
+    color: @cleaner_error;
+}
+
+.accent {
+    color: @cleaner_accent;
+}
+
+.action-icon {
+    color: @cleaner_icon_button_fg;
+}
+
+.pill {
+    border-radius: 999px;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+preferencesgroup {
+    margin-bottom: 24px;
+}
+
+row.expander {
+    padding: 8px 0;
+}
+
+row.expander.expanded {
+    background-color: alpha(@cleaner_view_bg, 0.6);
+}
+
+scrollbar {
+    background-color: transparent;
+}
+
+scrollbar slider {
+    min-width: 8px;
+    min-height: 8px;
+    border-radius: 4px;
+    background-color: alpha(@cleaner_window_fg, 0.15);
+}
+
+scrollbar slider:hover {
+    background-color: alpha(@cleaner_window_fg, 0.24);
+}
+
+progressbar.osd {
+    min-height: 8px;
+}
+
+progressbar.osd trough {
+    background-color: alpha(@cleaner_window_fg, 0.1);
+    border-radius: 4px;
+}
+
+progressbar.osd progress {
+    background-color: @cleaner_accent_bg;
+    border-radius: 4px;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.pulsing {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.compact .navigation-sidebar row {
+    padding: 8px 12px;
+}
+
+.compact .card {
+    border-radius: 8px;
+}
+
+.compact .title-1 {
+    font-size: 20pt;
+}
+
+.compact .title-2 {
+    font-size: 16pt;
+}
+
+.theme-selector {
+    border-radius: 50%;
+    border: 2px solid alpha(@cleaner_window_fg, 0.3);
+    padding: 0;
+    margin: 0;
+}
+
+.theme-default {
+    background: conic-gradient(from 135deg, #fafafb 0deg, #fafafb 180deg, #222226 180deg, #222226 360deg);
+    background-size: 100% 100%;
+    background-origin: border-box;
+}
+
+.theme-light {
+    background-color: #fafafb;
+    border-color: alpha(@cleaner_window_fg, 0.24);
+}
+
+.theme-dark {
+    background-color: #222226;
+}
+
+.theme-button {
+    padding: 4px;
+    min-width: 52px;
+    min-height: 52px;
+    transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.theme-button:checked {
+    background-color: @cleaner_selection_bg;
+    border-radius: 50%;
+}
+
+.theme-button:checked .theme-selector {
+    border-color: @cleaner_focus_ring;
+    border-width: 3px;
+}
+
+.theme-check {
+    color: @cleaner_accent;
+    background-color: @cleaner_window_bg;
+    border-radius: 50%;
+    padding: 2px;
+    -gtk-icon-size: 16px;
+}
+
+.menu-item {
+    border-radius: 6px;
+    margin: 1px 0;
+    color: @cleaner_popover_fg;
+}
+
+.menu-item:hover {
+    background-color: @cleaner_hover_state;
+}
+
+popover.menu contents {
+    padding: 6px;
+    color: @cleaner_popover_fg;
+}
+
+.section-title {
+    color: @cleaner_primary_text;
+    font-weight: 600;
+}
+
+.app-status-bar {
+    min-height: 26px;
+    padding: 0 14px 6px 14px;
+    background-color: transparent;
+}
+
+.app-version-label {
+    color: alpha(@cleaner_window_fg, 0.52);
+    font-size: 9pt;
+}
+
+.update-indicator {
+    min-height: 0;
+    padding: 1px 7px;
+    border-radius: 7px;
+}
+
+.update-indicator:hover {
+    background-color: alpha(@cleaner_error, 0.12);
+}
+
+.data-cleaner-high-contrast .navigation-sidebar row,
+.data-cleaner-high-contrast .data-cleaner-surface-card {
+    border-width: 1px;
+    border-color: alpha(@cleaner_window_fg, 0.28);
+    box-shadow: none;
+}
+
+.data-cleaner-high-contrast .dim-label,
+.data-cleaner-high-contrast .welcome-subtitle,
+.data-cleaner-high-contrast .caption {
+    color: alpha(@cleaner_primary_text, 0.86);
+}
+
+.data-cleaner-reduced-motion .navigation-sidebar row,
+.data-cleaner-reduced-motion .theme-button,
+.data-cleaner-reduced-motion .data-cleaner-surface-card,
+.data-cleaner-reduced-motion .pulsing {
+    transition: none;
+    animation: none;
+}
+
+/* Collapsed navigation rail.
+   `set_width_request` only raises a widget's minimum width; a non-expanding
+   GtkBox child is allocated its natural width, so the sidebar can only reach
+   SIDEBAR_COLLAPSED_WIDTH once the header bar inside it stops asking for more.
+   Trimming the header's padding and the row margins drops that natural width
+   below the request, matching the Speech to Text rail. */
+.sidebar-collapsed headerbar.data-cleaner-sidebar-header {
+    padding-left: 0;
+    padding-right: 0;
+    min-width: 0;
+}
+
+.sidebar-collapsed .navigation-sidebar row {
+    padding: 0;
+    margin: 2px 4px;
+}
+
+.sidebar-collapsed .navigation-sidebar .nav-row-box {
+    margin: 0;
+}

@@ -1,0 +1,45 @@
+# Rust build output
+/target/
+**/*.rs.bk
+*.profraw
+
+# Packaging and distribution artifacts
+/build/
+/dist/
+*.AppImage
+*.rpm
+*.deb
+
+# Flatpak build state
+/.flatpak-builder/
+/.flatpak/
+/repo/
+
+# Local environment and logs
+.env
+.env.*
+!.env.example
+*.log
+
+# Temporary and backup files
+*.tmp
+*.bak
+*.orig
+*.rej
+*~
+
+# Editors and operating-system metadata
+/.idea/
+/.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Python cache created by helper scripts
+__pycache__/
+*.py[cod]
+
+# Local agent workspace files
+/.codex/
+/.agents/
+/LAYOUT.md

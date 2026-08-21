@@ -1,0 +1,1255 @@
+# Data Cleaner translation template
+# Copyright (C) 2024-2026 Christos A. Daggas
+# This file is distributed under the same license as the data-cleaner package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: data-cleaner 1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/christosdaggas/Cleaner/issues\n"
+"POT-Creation-Date: 2026-08-21 12:00+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Application name
+#: src/main.rs
+msgid "Linux Cleaner"
+msgstr ""
+
+#. Application description
+#: src/application.rs
+msgid "A safe and transparent Linux system cleaner"
+msgstr ""
+
+#. About dialog
+#: src/application.rs
+msgid "About"
+msgstr ""
+
+#: src/application.rs
+msgid "Preferences"
+msgstr ""
+
+#: src/application.rs
+msgid "Quit"
+msgstr ""
+
+#. Navigation items
+#: src/ui/main_window.rs
+msgid "Dashboard"
+msgstr ""
+
+#: src/ui/main_window.rs
+msgid "Browsers"
+msgstr ""
+
+#: src/ui/main_window.rs
+msgid "Applications"
+msgstr ""
+
+#: src/ui/main_window.rs
+msgid "Custom Directories"
+msgstr ""
+
+#: src/ui/main_window.rs
+msgid "System"
+msgstr ""
+
+#: src/ui/main_window.rs
+msgid "Settings"
+msgstr ""
+
+#: src/ui/main_window.rs
+msgid "Diagnostics"
+msgstr ""
+
+#: src/ui/main_window.rs
+msgid "Help"
+msgstr ""
+
+#: src/ui/main_window.rs
+msgid "Show sidebar"
+msgstr ""
+
+#: src/ui/main_window.rs
+msgid "Hide sidebar"
+msgstr ""
+
+#: src/ui/main_window.rs
+msgid "Main Menu"
+msgstr ""
+
+#: src/ui/main_window.rs
+msgid "Cleaner"
+msgstr ""
+
+#. Theme selector
+#: src/ui/main_window.rs
+msgid "Light"
+msgstr ""
+
+#: src/ui/main_window.rs
+msgid "Dark"
+msgstr ""
+
+#. Dashboard page
+#: src/ui/dashboard_page.rs
+msgid "Safe and transparent system cleaning"
+msgstr ""
+
+#: src/ui/dashboard_page.rs
+msgid "Reclaimable Space"
+msgstr ""
+
+#: src/ui/dashboard_page.rs
+msgid "Enabled Targets"
+msgstr ""
+
+#: src/ui/dashboard_page.rs
+msgid "Last Cleanup"
+msgstr ""
+
+#: src/ui/dashboard_page.rs
+msgid "Never"
+msgstr ""
+
+#: src/ui/dashboard_page.rs
+msgid "Start Cleanup"
+msgstr ""
+
+#: src/ui/dashboard_page.rs
+msgid ""
+"Scan enabled targets or clean them using your configured confirmation "
+"settings."
+msgstr ""
+
+#: src/ui/dashboard_page.rs
+msgid "Scan for Files"
+msgstr ""
+
+#: src/ui/dashboard_page.rs
+msgid "Clean Now"
+msgstr ""
+
+#: src/ui/dashboard_page.rs
+msgid "Scanning..."
+msgstr ""
+
+#: src/ui/dashboard_page.rs
+msgid "Click 'Scan' to check"
+msgstr ""
+
+#. Browsers page
+#: src/ui/browsers_page.rs
+msgid "Browser Cleanup"
+msgstr ""
+
+#: src/ui/browsers_page.rs
+msgid ""
+"Select which browser data to clean. Cache is safe to delete, but cookies and "
+"history are permanent."
+msgstr ""
+
+#: src/ui/browsers_page.rs
+msgid "Installed"
+msgstr ""
+
+#: src/ui/browsers_page.rs
+msgid "Not detected"
+msgstr ""
+
+#. Browser data types
+#: src/ui/browsers_page.rs
+msgid "Cache"
+msgstr ""
+
+#: src/ui/browsers_page.rs
+msgid "Cookies"
+msgstr ""
+
+#: src/ui/browsers_page.rs
+msgid "History"
+msgstr ""
+
+#: src/ui/browsers_page.rs
+msgid "Sessions"
+msgstr ""
+
+#. Applications page
+#: src/ui/applications_page.rs
+msgid "Application Caches"
+msgstr ""
+
+#: src/ui/applications_page.rs
+msgid ""
+"Clean caches from package managers and applications. These are safe to "
+"delete but may slow down first runs."
+msgstr ""
+
+#. System page
+#: src/ui/system_page.rs
+msgid "System Cleanup"
+msgstr ""
+
+#: src/ui/system_page.rs
+msgid ""
+"Clean system-level temporary files and caches. Some options require "
+"administrator privileges."
+msgstr ""
+
+#. Settings page
+#: src/ui/settings_page.rs
+msgid "General"
+msgstr ""
+
+#: src/ui/settings_page.rs
+msgid "Confirm Before Cleaning"
+msgstr ""
+
+#: src/ui/settings_page.rs
+msgid "Show a confirmation dialog before deleting files"
+msgstr ""
+
+#: src/ui/settings_page.rs
+msgid "Show Cleanup Summary"
+msgstr ""
+
+#: src/ui/settings_page.rs
+msgid "Display a summary after cleaning completes"
+msgstr ""
+
+#: src/ui/settings_page.rs
+msgid "Safety"
+msgstr ""
+
+#: src/ui/settings_page.rs
+msgid "These settings help prevent accidental data loss"
+msgstr ""
+
+#: src/ui/settings_page.rs
+msgid "Maximum Files Per Operation"
+msgstr ""
+
+#: src/ui/settings_page.rs
+msgid "Stop after deleting this many files"
+msgstr ""
+
+#: src/ui/settings_page.rs
+msgid "Follow Symlinks"
+msgstr ""
+
+#: src/ui/settings_page.rs
+msgid "Dangerous: May delete files outside target directories"
+msgstr ""
+
+#: src/ui/settings_page.rs
+msgid "Appearance"
+msgstr ""
+
+#: src/ui/settings_page.rs
+msgid "Color Scheme"
+msgstr ""
+
+#. Help page
+#: src/ui/help_page.rs
+msgid "Learn how to use Cleaner"
+msgstr ""
+
+#: src/ui/help_page.rs
+msgid "About Cleaner"
+msgstr ""
+
+#: src/ui/help_page.rs
+msgid ""
+"Cleaner is a system cleaning utility for Linux that helps you free up disk "
+"space by removing temporary files, caches, and other unnecessary data."
+msgstr ""
+
+#. Common UI elements
+msgid "Cancel"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Disable"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid "Information"
+msgstr ""
+
+msgid "Success"
+msgstr ""
+
+#. File size units
+msgid "bytes"
+msgstr ""
+
+msgid "KB"
+msgstr ""
+
+msgid "MB"
+msgstr ""
+
+msgid "GB"
+msgstr ""
+
+msgid "TB"
+msgstr ""
+
+#. Time-related
+msgid "Today"
+msgstr ""
+
+msgid "Yesterday"
+msgstr ""
+
+msgid "days ago"
+msgstr ""
+
+#. Current application and navigation
+msgid "Data Cleaner"
+msgstr ""
+
+msgid "About Data Cleaner"
+msgstr ""
+
+msgid "Open Data Cleaner"
+msgstr ""
+
+msgid "Clean"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+msgid "Storage Analyzer"
+msgstr ""
+
+msgid "Cleanup Log"
+msgstr ""
+
+msgid "What's New"
+msgstr ""
+
+msgid "Release history and highlights"
+msgstr ""
+
+msgid "Initial public release"
+msgstr ""
+
+#. Language and appearance settings
+msgid "Automatic"
+msgstr ""
+
+msgid "Application Language"
+msgstr ""
+
+msgid "Choose a language or follow your system automatically"
+msgstr ""
+
+msgid "Choose your preferred theme"
+msgstr ""
+
+#. Scheduler and log-cleanup settings
+msgid "Start Data Cleaner at Login"
+msgstr ""
+
+msgid ""
+"Start in the background so scheduled cleanup can run while you are signed in"
+msgstr ""
+
+msgid "Automatic Cleanup"
+msgstr ""
+
+msgid ""
+"Runs selected cleanup rules only while Data Cleaner is open, with the same "
+"safety limits."
+msgstr ""
+
+msgid "Scheduled Automatic Cleanup"
+msgstr ""
+
+msgid "Cleanup Days"
+msgstr ""
+
+msgid "Cleanup Time"
+msgstr ""
+
+msgid "Uses your current local time"
+msgstr ""
+
+msgid "Every day"
+msgstr ""
+
+msgid "every day"
+msgstr ""
+
+msgid "on"
+msgstr ""
+
+msgid "Runs selected rules {days} at {time} while the app is open"
+msgstr ""
+
+msgid "Off. Enable to run selected rules at the chosen day and time"
+msgstr ""
+
+msgid "Monday"
+msgstr ""
+
+msgid "Tuesday"
+msgstr ""
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Thursday"
+msgstr ""
+
+msgid "Friday"
+msgstr ""
+
+msgid "Saturday"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
+
+msgid "Maximum Data Per Operation"
+msgstr ""
+
+msgid "Block cleanup when selected data exceeds this many GiB"
+msgstr ""
+
+msgid "Log Cleanup"
+msgstr ""
+
+msgid ""
+"Optional cleanup of older log data. Both cleanup types are off by default."
+msgstr ""
+
+msgid "Application Logs"
+msgstr ""
+
+msgid ""
+"Clean only old .log and rotated .log.* files from your user state and cache "
+"folders"
+msgstr ""
+
+msgid "System Journal"
+msgstr ""
+
+msgid "Keep Recent Logs"
+msgstr ""
+
+msgid "Only clean log data older than this retention period"
+msgstr ""
+
+msgid "days"
+msgstr ""
+
+#. Dashboard and Storage Analyzer
+msgid "Disk Storage"
+msgstr ""
+
+msgid "Disk information unavailable"
+msgstr ""
+
+msgid "used"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Scan to estimate"
+msgstr ""
+
+msgid "Cleanup potential"
+msgstr ""
+
+msgid "Enabled targets"
+msgstr ""
+
+msgid "Last cleanup"
+msgstr ""
+
+msgid "Analyze a Folder"
+msgstr ""
+
+msgid "Choose a local folder to find its largest files and subfolders."
+msgstr ""
+
+msgid "Choose Folder…"
+msgstr ""
+
+msgid "Scan Again"
+msgstr ""
+
+msgid "Minimum size"
+msgstr ""
+
+msgid "Manual analysis · same filesystem only"
+msgstr ""
+
+msgid "Nothing selected"
+msgstr ""
+
+msgid "Select files or folders to review before moving them to Trash"
+msgstr ""
+
+msgid "Move Selected to Trash"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Relative size"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+#. Cleanup result log
+msgid "Latest Cleanup"
+msgstr ""
+
+msgid "Back to Dashboard"
+msgstr ""
+
+msgid "Copy Log"
+msgstr ""
+
+msgid "Copy the complete cleanup log"
+msgstr ""
+
+#. Version 1.0.0 release notes
+msgid ""
+"A modern GNOME interface with unified light and dark surfaces, system accent "
+"colors, high contrast, and reduced motion support."
+msgstr ""
+
+msgid ""
+"A dashboard storage overview for used, available, total, and reclaimable "
+"disk space."
+msgstr ""
+
+msgid ""
+"Safe browser cleanup with installed-browser detection and unavailable "
+"browsers clearly disabled."
+msgstr ""
+
+msgid ""
+"Application cache, system, custom directory, application log, and system "
+"journal cleanup with configurable retention."
+msgstr ""
+
+msgid ""
+"Scheduled automatic cleanup with multiple cleanup days, a chosen local time, "
+"and optional start at login."
+msgstr ""
+
+msgid ""
+"A lightweight visual Storage Analyzer for finding large files and folders "
+"and moving selected items to Trash."
+msgstr ""
+
+msgid ""
+"An in-app cleanup log showing deleted, skipped, and failed items after every "
+"cleanup."
+msgstr ""
+
+msgid ""
+"System tray integration with an adaptive symbolic icon and quick cleanup "
+"actions."
+msgstr ""
+
+msgid ""
+"A startup update check with direct access to the latest verified GitHub "
+"release."
+msgstr ""
+
+msgid ""
+"Safety limits, critical-path protection, symlink traversal prevention, "
+"previews, and running-browser checks."
+msgstr ""
+
+msgid ""
+"Consistent Data Cleaner application, executable, package, desktop, and "
+"configuration naming."
+msgstr ""
+
+msgid ""
+"English, Greek, Italian, Spanish, German, and French interface languages "
+"with automatic system-language detection."
+msgstr ""
+
+#. Destructive cleanup dialogs and dynamic UI templates
+msgid "Confirm Cleanup"
+msgstr ""
+
+msgid "Nothing to Clean"
+msgstr ""
+
+msgid "Cleanup Complete"
+msgstr ""
+
+msgid "Cleanup Cancelled"
+msgstr ""
+
+msgid "Cleanup Blocked"
+msgstr ""
+
+msgid "Operation in Progress"
+msgstr ""
+
+msgid "{used} used"
+msgstr ""
+
+msgid "of {total} total on {device} (mounted at {mount})"
+msgstr ""
+
+msgid "{used} used, {available} available"
+msgstr ""
+
+msgid "Home filesystem could not be detected"
+msgstr ""
+
+msgid ""
+"This will delete {count} files ({size}).{journal}\n"
+"\n"
+"This action cannot be undone."
+msgstr ""
+
+msgid ""
+"\n"
+"The archived system journal older than {days} days will also be vacuumed "
+"with administrator approval."
+msgstr ""
+
+msgid ""
+"Deleted {count} files and freed {size}.\n"
+"{failed} items failed.{journal}"
+msgstr ""
+
+msgid ""
+"\n"
+"System journal: {message}."
+msgstr ""
+
+msgid ""
+"\n"
+"System journal failed: {error}"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:356
+msgid "Choose a Folder to Analyze"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:359
+msgid "Analyze"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:437
+msgid "Cancelling…"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:507
+msgid "Analyzing Storage…"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:509
+#, rust-format
+msgid "Scanning {path} without following symbolic links"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:550
+#, rust-format
+msgid "{count} items"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:561
+msgid "Some entries skipped"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:565
+msgid "All readable entries were scanned"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:568
+#, rust-format
+msgid "{count} entries could not be read"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:646
+msgid "No individual files or folders meet the selected size threshold"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:740
+msgid "Inspect this folder"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:769
+msgid "date unavailable"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:771
+#, rust-format
+msgid "{kind} · Modified {date} · {path}"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:815
+msgid "1 item selected"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:818
+#, rust-format
+msgid "{count} items selected"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:831
+#, rust-format
+msgid "{size} will be reviewed before moving"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1008
+#, rust-format
+msgid ""
+"\n"
+"• and {count} more"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1015
+#, rust-format
+msgid ""
+"Move {count} selected {item_word} ({size}) to Trash?\n"
+"\n"
+"{preview}{more}\n"
+"\n"
+"Folders include all contents, including smaller items grouped as Other. "
+"Items can be restored from Trash."
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1032
+msgid "Move Selected Items to Trash?"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1103
+#, rust-format
+msgid ""
+"Moved {moved} {item_word} ({size}) to Trash.\n"
+"{failed} items failed.{details}"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:182
+#, rust-format
+msgid "{mode} cleanup · {time}"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:192
+#, rust-format
+msgid ""
+"{status} · {files} files and {folders} folders removed · {size} freed · "
+"{notices} notices"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:205
+msgid "DATA CLEANER — CLEANUP LOG"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:210
+#, rust-format
+msgid "Completed: {time}"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:215
+#, rust-format
+msgid "Mode: {mode}"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:220
+#, rust-format
+msgid "Status: {status}"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:226
+#, rust-format
+msgid "Space freed: {size}"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:234
+#, rust-format
+msgid "Deleted files: {count}"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:242
+#, rust-format
+msgid "Deleted folders: {count}"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:250
+#, rust-format
+msgid "Failed items: {count}"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:258
+#, rust-format
+msgid "Skipped items: {count}"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:270
+#, rust-format
+msgid ""
+"\n"
+"BLOCKED\n"
+"  {reason}"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:324
+msgid ""
+"\n"
+"SYSTEM JOURNAL"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:330
+#, rust-format
+msgid "  [CLEANED] {message}"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:337
+#, rust-format
+msgid "  [FAILED] {error}"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:345
+msgid "  [SKIPPED] Scheduled cleanup cannot request administrator approval"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:353
+msgid "  [SKIPPED] Cleanup was cancelled"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:360
+msgid "  [SKIPPED] Cleanup was blocked"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:367
+msgid "  [NOT RUN] No journal result was returned"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:374
+msgid "  [DISABLED] System journal cleanup was not enabled"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:396 src/ui/cleanup_log_page.rs:438
+#: src/ui/cleanup_log_page.rs:481
+#, rust-format
+msgid ""
+"\n"
+"{heading} ({count})"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:404 src/ui/cleanup_log_page.rs:446
+#: src/ui/cleanup_log_page.rs:489
+msgid "  None"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:411
+#, rust-format
+msgid "  [{status}] {path}\n"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:453
+#, rust-format
+msgid ""
+"  [{status}] {path}\n"
+"    Reason: {reason}\n"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:496
+#, rust-format
+msgid "  [{status}] {message}\n"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:523
+#, rust-format
+msgid "  [TRUNCATED] {omitted} additional entries omitted from the in-app log"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:79
+msgid "System compatibility and environment information"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:123 src/ui/diagnostics_page.rs:128
+msgid "Desktop Environment"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:124
+msgid "Information about your desktop environment"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:135 src/ui/diagnostics_page.rs:170
+#: src/ui/diagnostics_page.rs:178
+msgid "Not set"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:143 src/ui/diagnostics_page.rs:209
+#: src/ui/diagnostics_page.rs:236
+msgid "Unknown"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:155 src/ui/diagnostics_page.rs:162
+msgid "Display Server"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:156
+msgid "Information about the display server"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:188
+msgid "Compatibility"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:190
+msgid "Full Wayland support via GTK4"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:192
+msgid "X11 mode - all features available"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:203
+msgid "Theme"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:204
+msgid "Current theme and color scheme settings"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:211
+msgid "Icon Theme"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:231
+msgid "Follow System"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:232
+msgid "Force Light"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:233
+msgid "Force Dark"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:234
+msgid "Prefer Light"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:235
+msgid "Prefer Dark"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:239
+msgid "Theme Mode"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:246
+msgid "High Contrast"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:253
+msgid "Reduced Motion"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:260
+msgid "Accent Color"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:271
+msgid "Icon Resolution"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:272
+msgid "Status of icon loading and fallbacks"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:299
+msgid "Resolution Rate"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:301
+#, rust-format
+msgid "{percent}% icons resolved from theme"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:313
+msgid "XDG Portals"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:314
+msgid "Desktop portal availability for sandboxed access"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:319
+msgid "Flatpak Environment"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:321
+msgid "Running in Flatpak sandbox"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:323
+msgid "Native installation"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:332
+msgid "Default"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:334
+msgid "GTK Portal Usage"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:346
+msgid "Portal Service"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:361
+msgid "XDG Paths"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:362
+msgid "Standard directory locations being used"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:365
+msgid "Config"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:367
+msgid "Data"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:368
+msgid "Home"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:375
+msgid "Not available"
+msgstr ""
+
+#: src/ui/diagnostics_page.rs:393
+msgid "App Config"
+msgstr ""
+
+#: src/ui/help_page.rs:63
+msgid "Learn how to use Data Cleaner"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:175
+msgid "Files and folders smaller than this are grouped as Other"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:225
+msgid "Some entries could not be read"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:234
+msgid "Click a folder block to inspect its contents"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:376
+msgid "Local Folders Only"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:377
+msgid "Storage Analyzer currently supports local folders only."
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:403
+msgid ""
+"Wait for the current cleanup operation to finish before analyzing storage."
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:411
+msgid "Cancel Scan"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:467
+msgid "Scan Cancelled"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:468
+msgid "Choose a folder when you are ready to analyze storage."
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:474
+msgid "Could Not Analyze Folder"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:676
+msgid "Select this entire folder and all of its contents"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:678
+msgid "Select this file"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:761
+msgid "Folder"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:763
+msgid "File"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:889
+msgid "Other"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1021 src/ui/storage_analyzer_page.rs:1112
+msgid "item"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1023 src/ui/storage_analyzer_page.rs:1112
+msgid "items"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1063
+msgid "Wait for the current cleanup operation before moving storage items."
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1068
+msgid "Moving…"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1086
+msgid "Trash Operation Failed"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1087
+msgid "The operation did not return a result."
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1130
+msgid "Items Moved to Trash"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1132
+msgid "Nothing Was Moved"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1166
+msgid "Storage Operation in Progress"
+msgstr ""
+
+#: src/ui/storage_analyzer_page.rs:1167
+msgid ""
+"Cancel the current storage scan or wait for the Trash operation to finish "
+"before closing Data Cleaner."
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:162
+msgid "Scheduled"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:164
+msgid "Manual"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:175
+msgid "Blocked"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:177
+msgid "Cancelled"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:179
+msgid "Completed with notices"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:181
+msgid "Completed successfully"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:280
+msgid "DELETED FILES"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:281 src/ui/cleanup_log_page.rs:288
+msgid "DELETED"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:287
+msgid "DELETED EMPTY FOLDERS"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:294
+msgid "SKIPPED DURING CLEANUP"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:295 src/ui/cleanup_log_page.rs:302
+msgid "SKIPPED"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:301
+msgid "SKIPPED DURING SCAN"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:308 src/ui/cleanup_log_page.rs:309
+msgid "FAILED"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:315
+msgid "SECURITY NOTICES"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:316
+msgid "NOTICE"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:322
+msgid "SCAN ERRORS"
+msgstr ""
+
+#: src/ui/cleanup_log_page.rs:323
+msgid "ERROR"
+msgstr ""

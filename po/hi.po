@@ -1,0 +1,336 @@
+# Hindi translation for Cleaner
+# Copyright (C) 2024-2026 Christos A. Daggas
+# This file is distributed under the same license as the data-cleaner package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: data-cleaner 1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/christosdaggas/Cleaner/issues\n"
+"POT-Creation-Date: 2026-01-14 12:00+0000\n"
+"PO-Revision-Date: 2026-01-14 12:00+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: Hindi\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Application name
+#: src/main.rs
+msgid "Linux Cleaner"
+msgstr "लिनक्स क्लीनर"
+
+#. Application description
+#: src/application.rs
+msgid "A safe and transparent Linux system cleaner"
+msgstr "एक सुरक्षित और पारदर्शी लिनक्स सिस्टम क्लीनर"
+
+#. About dialog
+#: src/application.rs
+msgid "About"
+msgstr "के बारे में"
+
+#: src/application.rs
+msgid "Preferences"
+msgstr "प्राथमिकताएँ"
+
+#: src/application.rs
+msgid "Quit"
+msgstr "बाहर निकलें"
+
+#. Navigation items
+#: src/ui/main_window.rs
+msgid "Dashboard"
+msgstr "डैशबोर्ड"
+
+#: src/ui/main_window.rs
+msgid "Browsers"
+msgstr "ब्राउज़र"
+
+#: src/ui/main_window.rs
+msgid "Applications"
+msgstr "एप्लिकेशन"
+
+#: src/ui/main_window.rs
+msgid "Custom Directories"
+msgstr "कस्टम निर्देशिकाएँ"
+
+#: src/ui/main_window.rs
+msgid "System"
+msgstr "सिस्टम"
+
+#: src/ui/main_window.rs
+msgid "Settings"
+msgstr "सेटिंग्स"
+
+#: src/ui/main_window.rs
+msgid "Diagnostics"
+msgstr "निदान"
+
+#: src/ui/main_window.rs
+msgid "Help"
+msgstr "मदद"
+
+#: src/ui/main_window.rs
+msgid "Show sidebar"
+msgstr "साइडबार दिखाएं"
+
+#: src/ui/main_window.rs
+msgid "Hide sidebar"
+msgstr "साइडबार छुपाएं"
+
+#: src/ui/main_window.rs
+msgid "Main Menu"
+msgstr "मुख्य मेनू"
+
+#: src/ui/main_window.rs
+msgid "Cleaner"
+msgstr "क्लीनर"
+
+#. Theme selector
+#: src/ui/main_window.rs
+msgid "Light"
+msgstr "हल्का"
+
+#: src/ui/main_window.rs
+msgid "Dark"
+msgstr "गहरा"
+
+#. Dashboard page
+#: src/ui/dashboard_page.rs
+msgid "Safe and transparent system cleaning"
+msgstr "सुरक्षित और पारदर्शी सिस्टम सफाई"
+
+#: src/ui/dashboard_page.rs
+msgid "Reclaimable Space"
+msgstr "पुनः प्राप्य स्थान"
+
+#: src/ui/dashboard_page.rs
+msgid "Enabled Targets"
+msgstr "सक्षम लक्ष्य"
+
+#: src/ui/dashboard_page.rs
+msgid "Last Cleanup"
+msgstr "अंतिम सफाई"
+
+#: src/ui/dashboard_page.rs
+msgid "Never"
+msgstr "कभी नहीं"
+
+#: src/ui/dashboard_page.rs
+msgid "Start Cleanup"
+msgstr "सफाई शुरू करें"
+
+#: src/ui/dashboard_page.rs
+msgid "Scan and clean enabled targets. You'll see a preview before anything is deleted."
+msgstr "सक्षम लक्ष्यों को स्कैन और साफ करें। कुछ भी हटाने से पहले आप पूर्वावलोकन देखेंगे।"
+
+#: src/ui/dashboard_page.rs
+msgid "Scan for Files"
+msgstr "फाइलें खोजें"
+
+#: src/ui/dashboard_page.rs
+msgid "Clean Now"
+msgstr "अभी साफ करें"
+
+#: src/ui/dashboard_page.rs
+msgid "Scanning..."
+msgstr "स्कैन हो रहा है..."
+
+#: src/ui/dashboard_page.rs
+msgid "Click 'Scan' to check"
+msgstr "जांचने के लिए 'स्कैन' पर क्लिक करें"
+
+#. Browsers page
+#: src/ui/browsers_page.rs
+msgid "Browser Cleanup"
+msgstr "ब्राउज़र सफाई"
+
+#: src/ui/browsers_page.rs
+msgid "Select which browser data to clean. Cache is safe to delete, but cookies and history are permanent."
+msgstr "चुनें कि कौन सा ब्राउज़र डेटा साफ करना है। कैश हटाना सुरक्षित है, लेकिन कुकीज़ और इतिहास स्थायी हैं।"
+
+#: src/ui/browsers_page.rs
+msgid "Installed"
+msgstr "स्थापित"
+
+#: src/ui/browsers_page.rs
+msgid "Not detected"
+msgstr "पता नहीं चला"
+
+#. Browser data types
+#: src/ui/browsers_page.rs
+msgid "Cache"
+msgstr "कैश"
+
+#: src/ui/browsers_page.rs
+msgid "Cookies"
+msgstr "कुकीज़"
+
+#: src/ui/browsers_page.rs
+msgid "History"
+msgstr "इतिहास"
+
+#: src/ui/browsers_page.rs
+msgid "Sessions"
+msgstr "सत्र"
+
+#. Applications page
+#: src/ui/applications_page.rs
+msgid "Application Caches"
+msgstr "एप्लिकेशन कैश"
+
+#: src/ui/applications_page.rs
+msgid "Clean caches from package managers and applications. These are safe to delete but may slow down first runs."
+msgstr "पैकेज मैनेजर और एप्लिकेशन से कैश साफ करें। ये हटाना सुरक्षित है लेकिन पहली बार चलने में धीमा हो सकता है।"
+
+#. System page
+#: src/ui/system_page.rs
+msgid "System Cleanup"
+msgstr "सिस्टम सफाई"
+
+#: src/ui/system_page.rs
+msgid "Clean system-level temporary files and caches. Some options require administrator privileges."
+msgstr "सिस्टम-स्तरीय अस्थायी फाइलें और कैश साफ करें। कुछ विकल्पों के लिए व्यवस्थापक विशेषाधिकार आवश्यक हैं।"
+
+#. Settings page
+#: src/ui/settings_page.rs
+msgid "General"
+msgstr "सामान्य"
+
+#: src/ui/settings_page.rs
+msgid "Confirm Before Cleaning"
+msgstr "सफाई से पहले पुष्टि करें"
+
+#: src/ui/settings_page.rs
+msgid "Show a confirmation dialog before deleting files"
+msgstr "फाइलें हटाने से पहले पुष्टि संवाद दिखाएं"
+
+#: src/ui/settings_page.rs
+msgid "Show Cleanup Summary"
+msgstr "सफाई सारांश दिखाएं"
+
+#: src/ui/settings_page.rs
+msgid "Display a summary after cleaning completes"
+msgstr "सफाई पूर्ण होने के बाद सारांश प्रदर्शित करें"
+
+#: src/ui/settings_page.rs
+msgid "Safety"
+msgstr "सुरक्षा"
+
+#: src/ui/settings_page.rs
+msgid "These settings help prevent accidental data loss"
+msgstr "ये सेटिंग्स आकस्मिक डेटा हानि को रोकने में मदद करती हैं"
+
+#: src/ui/settings_page.rs
+msgid "Maximum Files Per Operation"
+msgstr "प्रति ऑपरेशन अधिकतम फाइलें"
+
+#: src/ui/settings_page.rs
+msgid "Stop after deleting this many files"
+msgstr "इतनी फाइलें हटाने के बाद रुकें"
+
+#: src/ui/settings_page.rs
+msgid "Follow Symlinks"
+msgstr "सिमलिंक का अनुसरण करें"
+
+#: src/ui/settings_page.rs
+msgid "Dangerous: May delete files outside target directories"
+msgstr "खतरनाक: लक्ष्य निर्देशिकाओं के बाहर फाइलें हटा सकता है"
+
+#: src/ui/settings_page.rs
+msgid "Appearance"
+msgstr "दिखावट"
+
+#: src/ui/settings_page.rs
+msgid "Color Scheme"
+msgstr "रंग योजना"
+
+#. Help page
+#: src/ui/help_page.rs
+msgid "Learn how to use Cleaner"
+msgstr "Cleaner का उपयोग करना सीखें"
+
+#: src/ui/help_page.rs
+msgid "About Cleaner"
+msgstr "Cleaner के बारे में"
+
+#: src/ui/help_page.rs
+msgid "Cleaner is a system cleaning utility for Linux that helps you free up disk space by removing temporary files, caches, and other unnecessary data."
+msgstr "Cleaner लिनक्स के लिए एक सिस्टम सफाई उपयोगिता है जो अस्थायी फाइलों, कैश और अन्य अनावश्यक डेटा को हटाकर डिस्क स्थान खाली करने में आपकी मदद करती है।"
+
+#. Common UI elements
+msgid "Cancel"
+msgstr "रद्द करें"
+
+msgid "OK"
+msgstr "ठीक है"
+
+msgid "Yes"
+msgstr "हाँ"
+
+msgid "No"
+msgstr "नहीं"
+
+msgid "Close"
+msgstr "बंद करें"
+
+msgid "Apply"
+msgstr "लागू करें"
+
+msgid "Save"
+msgstr "सहेजें"
+
+msgid "Delete"
+msgstr "हटाएं"
+
+msgid "Enable"
+msgstr "सक्षम करें"
+
+msgid "Disable"
+msgstr "अक्षम करें"
+
+msgid "Enabled"
+msgstr "सक्षम"
+
+msgid "Disabled"
+msgstr "अक्षम"
+
+msgid "Error"
+msgstr "त्रुटि"
+
+msgid "Warning"
+msgstr "चेतावनी"
+
+msgid "Information"
+msgstr "जानकारी"
+
+msgid "Success"
+msgstr "सफलता"
+
+#. File size units
+msgid "bytes"
+msgstr "बाइट्स"
+
+msgid "KB"
+msgstr "KB"
+
+msgid "MB"
+msgstr "MB"
+
+msgid "GB"
+msgstr "GB"
+
+msgid "TB"
+msgstr "TB"
+
+#. Time-related
+msgid "Today"
+msgstr "आज"
+
+msgid "Yesterday"
+msgstr "कल"
+
+msgid "days ago"
+msgstr "दिन पहले"

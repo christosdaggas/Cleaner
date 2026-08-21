@@ -1,0 +1,336 @@
+# Portuguese translation for Cleaner
+# Copyright (C) 2024-2026 Christos A. Daggas
+# This file is distributed under the same license as the data-cleaner package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: data-cleaner 1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/christosdaggas/Cleaner/issues\n"
+"POT-Creation-Date: 2026-01-14 12:00+0000\n"
+"PO-Revision-Date: 2026-01-14 12:00+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: Portuguese\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Application name
+#: src/main.rs
+msgid "Linux Cleaner"
+msgstr "Linux Cleaner"
+
+#. Application description
+#: src/application.rs
+msgid "A safe and transparent Linux system cleaner"
+msgstr "Um limpador de sistema Linux seguro e transparente"
+
+#. About dialog
+#: src/application.rs
+msgid "About"
+msgstr "Sobre"
+
+#: src/application.rs
+msgid "Preferences"
+msgstr "Preferências"
+
+#: src/application.rs
+msgid "Quit"
+msgstr "Sair"
+
+#. Navigation items
+#: src/ui/main_window.rs
+msgid "Dashboard"
+msgstr "Painel de controle"
+
+#: src/ui/main_window.rs
+msgid "Browsers"
+msgstr "Navegadores"
+
+#: src/ui/main_window.rs
+msgid "Applications"
+msgstr "Aplicativos"
+
+#: src/ui/main_window.rs
+msgid "Custom Directories"
+msgstr "Diretórios personalizados"
+
+#: src/ui/main_window.rs
+msgid "System"
+msgstr "Sistema"
+
+#: src/ui/main_window.rs
+msgid "Settings"
+msgstr "Configurações"
+
+#: src/ui/main_window.rs
+msgid "Diagnostics"
+msgstr "Diagnósticos"
+
+#: src/ui/main_window.rs
+msgid "Help"
+msgstr "Ajuda"
+
+#: src/ui/main_window.rs
+msgid "Show sidebar"
+msgstr "Mostrar barra lateral"
+
+#: src/ui/main_window.rs
+msgid "Hide sidebar"
+msgstr "Ocultar barra lateral"
+
+#: src/ui/main_window.rs
+msgid "Main Menu"
+msgstr "Menu principal"
+
+#: src/ui/main_window.rs
+msgid "Cleaner"
+msgstr "Cleaner"
+
+#. Theme selector
+#: src/ui/main_window.rs
+msgid "Light"
+msgstr "Claro"
+
+#: src/ui/main_window.rs
+msgid "Dark"
+msgstr "Escuro"
+
+#. Dashboard page
+#: src/ui/dashboard_page.rs
+msgid "Safe and transparent system cleaning"
+msgstr "Limpeza de sistema segura e transparente"
+
+#: src/ui/dashboard_page.rs
+msgid "Reclaimable Space"
+msgstr "Espaço recuperável"
+
+#: src/ui/dashboard_page.rs
+msgid "Enabled Targets"
+msgstr "Alvos habilitados"
+
+#: src/ui/dashboard_page.rs
+msgid "Last Cleanup"
+msgstr "Última limpeza"
+
+#: src/ui/dashboard_page.rs
+msgid "Never"
+msgstr "Nunca"
+
+#: src/ui/dashboard_page.rs
+msgid "Start Cleanup"
+msgstr "Iniciar limpeza"
+
+#: src/ui/dashboard_page.rs
+msgid "Scan and clean enabled targets. You'll see a preview before anything is deleted."
+msgstr "Escanear e limpar alvos habilitados. Você verá uma prévia antes de qualquer coisa ser excluída."
+
+#: src/ui/dashboard_page.rs
+msgid "Scan for Files"
+msgstr "Procurar arquivos"
+
+#: src/ui/dashboard_page.rs
+msgid "Clean Now"
+msgstr "Limpar agora"
+
+#: src/ui/dashboard_page.rs
+msgid "Scanning..."
+msgstr "Escaneando..."
+
+#: src/ui/dashboard_page.rs
+msgid "Click 'Scan' to check"
+msgstr "Clique em 'Escanear' para verificar"
+
+#. Browsers page
+#: src/ui/browsers_page.rs
+msgid "Browser Cleanup"
+msgstr "Limpeza do navegador"
+
+#: src/ui/browsers_page.rs
+msgid "Select which browser data to clean. Cache is safe to delete, but cookies and history are permanent."
+msgstr "Selecione quais dados do navegador limpar. O cache é seguro para excluir, mas cookies e histórico são permanentes."
+
+#: src/ui/browsers_page.rs
+msgid "Installed"
+msgstr "Instalado"
+
+#: src/ui/browsers_page.rs
+msgid "Not detected"
+msgstr "Não detectado"
+
+#. Browser data types
+#: src/ui/browsers_page.rs
+msgid "Cache"
+msgstr "Cache"
+
+#: src/ui/browsers_page.rs
+msgid "Cookies"
+msgstr "Cookies"
+
+#: src/ui/browsers_page.rs
+msgid "History"
+msgstr "Histórico"
+
+#: src/ui/browsers_page.rs
+msgid "Sessions"
+msgstr "Sessões"
+
+#. Applications page
+#: src/ui/applications_page.rs
+msgid "Application Caches"
+msgstr "Caches de aplicativos"
+
+#: src/ui/applications_page.rs
+msgid "Clean caches from package managers and applications. These are safe to delete but may slow down first runs."
+msgstr "Limpar caches de gerenciadores de pacotes e aplicativos. Estes são seguros para excluir, mas podem tornar as primeiras execuções mais lentas."
+
+#. System page
+#: src/ui/system_page.rs
+msgid "System Cleanup"
+msgstr "Limpeza do sistema"
+
+#: src/ui/system_page.rs
+msgid "Clean system-level temporary files and caches. Some options require administrator privileges."
+msgstr "Limpar arquivos temporários e caches em nível de sistema. Algumas opções requerem privilégios de administrador."
+
+#. Settings page
+#: src/ui/settings_page.rs
+msgid "General"
+msgstr "Geral"
+
+#: src/ui/settings_page.rs
+msgid "Confirm Before Cleaning"
+msgstr "Confirmar antes de limpar"
+
+#: src/ui/settings_page.rs
+msgid "Show a confirmation dialog before deleting files"
+msgstr "Mostrar diálogo de confirmação antes de excluir arquivos"
+
+#: src/ui/settings_page.rs
+msgid "Show Cleanup Summary"
+msgstr "Mostrar resumo da limpeza"
+
+#: src/ui/settings_page.rs
+msgid "Display a summary after cleaning completes"
+msgstr "Exibir um resumo após a conclusão da limpeza"
+
+#: src/ui/settings_page.rs
+msgid "Safety"
+msgstr "Segurança"
+
+#: src/ui/settings_page.rs
+msgid "These settings help prevent accidental data loss"
+msgstr "Estas configurações ajudam a prevenir perda acidental de dados"
+
+#: src/ui/settings_page.rs
+msgid "Maximum Files Per Operation"
+msgstr "Máximo de arquivos por operação"
+
+#: src/ui/settings_page.rs
+msgid "Stop after deleting this many files"
+msgstr "Parar após excluir esta quantidade de arquivos"
+
+#: src/ui/settings_page.rs
+msgid "Follow Symlinks"
+msgstr "Seguir links simbólicos"
+
+#: src/ui/settings_page.rs
+msgid "Dangerous: May delete files outside target directories"
+msgstr "Perigoso: Pode excluir arquivos fora dos diretórios de destino"
+
+#: src/ui/settings_page.rs
+msgid "Appearance"
+msgstr "Aparência"
+
+#: src/ui/settings_page.rs
+msgid "Color Scheme"
+msgstr "Esquema de cores"
+
+#. Help page
+#: src/ui/help_page.rs
+msgid "Learn how to use Cleaner"
+msgstr "Aprenda a usar o Cleaner"
+
+#: src/ui/help_page.rs
+msgid "About Cleaner"
+msgstr "Sobre o Cleaner"
+
+#: src/ui/help_page.rs
+msgid "Cleaner is a system cleaning utility for Linux that helps you free up disk space by removing temporary files, caches, and other unnecessary data."
+msgstr "Cleaner é um utilitário de limpeza de sistema para Linux que ajuda você a liberar espaço em disco removendo arquivos temporários, caches e outros dados desnecessários."
+
+#. Common UI elements
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Yes"
+msgstr "Sim"
+
+msgid "No"
+msgstr "Não"
+
+msgid "Close"
+msgstr "Fechar"
+
+msgid "Apply"
+msgstr "Aplicar"
+
+msgid "Save"
+msgstr "Salvar"
+
+msgid "Delete"
+msgstr "Excluir"
+
+msgid "Enable"
+msgstr "Habilitar"
+
+msgid "Disable"
+msgstr "Desabilitar"
+
+msgid "Enabled"
+msgstr "Habilitado"
+
+msgid "Disabled"
+msgstr "Desabilitado"
+
+msgid "Error"
+msgstr "Erro"
+
+msgid "Warning"
+msgstr "Aviso"
+
+msgid "Information"
+msgstr "Informação"
+
+msgid "Success"
+msgstr "Sucesso"
+
+#. File size units
+msgid "bytes"
+msgstr "bytes"
+
+msgid "KB"
+msgstr "KB"
+
+msgid "MB"
+msgstr "MB"
+
+msgid "GB"
+msgstr "GB"
+
+msgid "TB"
+msgstr "TB"
+
+#. Time-related
+msgid "Today"
+msgstr "Hoje"
+
+msgid "Yesterday"
+msgstr "Ontem"
+
+msgid "days ago"
+msgstr "dias atrás"

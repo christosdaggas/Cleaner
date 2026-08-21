@@ -1,0 +1,13 @@
+# List of available languages
+# Each line contains a language code for which a .po file exists
+
+ar
+de
+el
+es
+fr
+hi
+it
+pt
+ru
+zh

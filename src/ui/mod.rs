@@ -1,0 +1,23 @@
+mod applications_page;
+mod browsers_page;
+mod cleanup_log_page;
+mod custom_page;
+mod dashboard_page;
+mod diagnostics_page;
+mod help_page;
+mod main_window;
+mod settings_page;
+mod storage_analyzer_page;
+mod system_page;
+
+pub use applications_page::ApplicationsPage;
+pub use browsers_page::BrowsersPage;
+pub use cleanup_log_page::CleanupLogPage;
+pub use custom_page::CustomPage;
+pub use dashboard_page::DashboardPage;
+pub use diagnostics_page::DiagnosticsPage;
+pub use help_page::HelpPage;
+pub use main_window::MainWindow;
+pub use settings_page::SettingsPage;
+pub use storage_analyzer_page::StorageAnalyzerPage;
+pub use system_page::SystemPage;

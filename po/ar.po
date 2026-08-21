@@ -1,0 +1,337 @@
+# Arabic translation for Cleaner
+# Copyright (C) 2024-2026 Christos A. Daggas
+# This file is distributed under the same license as the data-cleaner package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: data-cleaner 1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/christosdaggas/Cleaner/issues\n"
+"POT-Creation-Date: 2026-01-14 12:00+0000\n"
+"PO-Revision-Date: 2026-01-14 12:00+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+#. Application name
+#: src/main.rs
+msgid "Linux Cleaner"
+msgstr "منظف لينكس"
+
+#. Application description
+#: src/application.rs
+msgid "A safe and transparent Linux system cleaner"
+msgstr "منظف نظام لينكس آمن وشفاف"
+
+#. About dialog
+#: src/application.rs
+msgid "About"
+msgstr "حول"
+
+#: src/application.rs
+msgid "Preferences"
+msgstr "التفضيلات"
+
+#: src/application.rs
+msgid "Quit"
+msgstr "إنهاء"
+
+#. Navigation items
+#: src/ui/main_window.rs
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+#: src/ui/main_window.rs
+msgid "Browsers"
+msgstr "المتصفحات"
+
+#: src/ui/main_window.rs
+msgid "Applications"
+msgstr "التطبيقات"
+
+#: src/ui/main_window.rs
+msgid "Custom Directories"
+msgstr "المجلدات المخصصة"
+
+#: src/ui/main_window.rs
+msgid "System"
+msgstr "النظام"
+
+#: src/ui/main_window.rs
+msgid "Settings"
+msgstr "الإعدادات"
+
+#: src/ui/main_window.rs
+msgid "Diagnostics"
+msgstr "التشخيصات"
+
+#: src/ui/main_window.rs
+msgid "Help"
+msgstr "المساعدة"
+
+#: src/ui/main_window.rs
+msgid "Show sidebar"
+msgstr "إظهار الشريط الجانبي"
+
+#: src/ui/main_window.rs
+msgid "Hide sidebar"
+msgstr "إخفاء الشريط الجانبي"
+
+#: src/ui/main_window.rs
+msgid "Main Menu"
+msgstr "القائمة الرئيسية"
+
+#: src/ui/main_window.rs
+msgid "Cleaner"
+msgstr "المنظف"
+
+#. Theme selector
+#: src/ui/main_window.rs
+msgid "Light"
+msgstr "فاتح"
+
+#: src/ui/main_window.rs
+msgid "Dark"
+msgstr "داكن"
+
+#. Dashboard page
+#: src/ui/dashboard_page.rs
+msgid "Safe and transparent system cleaning"
+msgstr "تنظيف النظام الآمن والشفاف"
+
+#: src/ui/dashboard_page.rs
+msgid "Reclaimable Space"
+msgstr "المساحة القابلة للاستعادة"
+
+#: src/ui/dashboard_page.rs
+msgid "Enabled Targets"
+msgstr "الأهداف المُفعّلة"
+
+#: src/ui/dashboard_page.rs
+msgid "Last Cleanup"
+msgstr "آخر تنظيف"
+
+#: src/ui/dashboard_page.rs
+msgid "Never"
+msgstr "أبداً"
+
+#: src/ui/dashboard_page.rs
+msgid "Start Cleanup"
+msgstr "بدء التنظيف"
+
+#: src/ui/dashboard_page.rs
+msgid "Scan and clean enabled targets. You'll see a preview before anything is deleted."
+msgstr "فحص وتنظيف الأهداف المُفعّلة. سترى معاينة قبل حذف أي شيء."
+
+#: src/ui/dashboard_page.rs
+msgid "Scan for Files"
+msgstr "فحص الملفات"
+
+#: src/ui/dashboard_page.rs
+msgid "Clean Now"
+msgstr "تنظيف الآن"
+
+#: src/ui/dashboard_page.rs
+msgid "Scanning..."
+msgstr "جارٍ الفحص..."
+
+#: src/ui/dashboard_page.rs
+msgid "Click 'Scan' to check"
+msgstr "انقر 'فحص' للتحقق"
+
+#. Browsers page
+#: src/ui/browsers_page.rs
+msgid "Browser Cleanup"
+msgstr "تنظيف المتصفح"
+
+#: src/ui/browsers_page.rs
+msgid "Select which browser data to clean. Cache is safe to delete, but cookies and history are permanent."
+msgstr "اختر بيانات المتصفح للتنظيف. الذاكرة المؤقتة آمنة للحذف، لكن ملفات تعريف الارتباط والسجل دائمة."
+
+#: src/ui/browsers_page.rs
+msgid "Installed"
+msgstr "مثبت"
+
+#: src/ui/browsers_page.rs
+msgid "Not detected"
+msgstr "غير مكتشف"
+
+#. Browser data types
+#: src/ui/browsers_page.rs
+msgid "Cache"
+msgstr "الذاكرة المؤقتة"
+
+#: src/ui/browsers_page.rs
+msgid "Cookies"
+msgstr "ملفات تعريف الارتباط"
+
+#: src/ui/browsers_page.rs
+msgid "History"
+msgstr "السجل"
+
+#: src/ui/browsers_page.rs
+msgid "Sessions"
+msgstr "الجلسات"
+
+#. Applications page
+#: src/ui/applications_page.rs
+msgid "Application Caches"
+msgstr "ذاكرة التطبيقات المؤقتة"
+
+#: src/ui/applications_page.rs
+msgid "Clean caches from package managers and applications. These are safe to delete but may slow down first runs."
+msgstr "تنظيف الذاكرة المؤقتة من مديري الحزم والتطبيقات. هذه آمنة للحذف لكنها قد تبطئ التشغيل الأول."
+
+#. System page
+#: src/ui/system_page.rs
+msgid "System Cleanup"
+msgstr "تنظيف النظام"
+
+#: src/ui/system_page.rs
+msgid "Clean system-level temporary files and caches. Some options require administrator privileges."
+msgstr "تنظيف الملفات المؤقتة والذاكرة المؤقتة على مستوى النظام. بعض الخيارات تتطلب صلاحيات المسؤول."
+
+#. Settings page
+#: src/ui/settings_page.rs
+msgid "General"
+msgstr "عام"
+
+#: src/ui/settings_page.rs
+msgid "Confirm Before Cleaning"
+msgstr "تأكيد قبل التنظيف"
+
+#: src/ui/settings_page.rs
+msgid "Show a confirmation dialog before deleting files"
+msgstr "عرض مربع حوار تأكيد قبل حذف الملفات"
+
+#: src/ui/settings_page.rs
+msgid "Show Cleanup Summary"
+msgstr "عرض ملخص التنظيف"
+
+#: src/ui/settings_page.rs
+msgid "Display a summary after cleaning completes"
+msgstr "عرض ملخص بعد اكتمال التنظيف"
+
+#: src/ui/settings_page.rs
+msgid "Safety"
+msgstr "الأمان"
+
+#: src/ui/settings_page.rs
+msgid "These settings help prevent accidental data loss"
+msgstr "هذه الإعدادات تساعد في منع فقدان البيانات العرضي"
+
+#: src/ui/settings_page.rs
+msgid "Maximum Files Per Operation"
+msgstr "الحد الأقصى للملفات لكل عملية"
+
+#: src/ui/settings_page.rs
+msgid "Stop after deleting this many files"
+msgstr "التوقف بعد حذف هذا العدد من الملفات"
+
+#: src/ui/settings_page.rs
+msgid "Follow Symlinks"
+msgstr "تتبع الروابط الرمزية"
+
+#: src/ui/settings_page.rs
+msgid "Dangerous: May delete files outside target directories"
+msgstr "خطير: قد يحذف ملفات خارج المجلدات المستهدفة"
+
+#: src/ui/settings_page.rs
+msgid "Appearance"
+msgstr "المظهر"
+
+#: src/ui/settings_page.rs
+msgid "Color Scheme"
+msgstr "نظام الألوان"
+
+#. Help page
+#: src/ui/help_page.rs
+msgid "Learn how to use Cleaner"
+msgstr "تعلم كيفية استخدام المنظف"
+
+#: src/ui/help_page.rs
+msgid "About Cleaner"
+msgstr "حول المنظف"
+
+#: src/ui/help_page.rs
+msgid "Cleaner is a system cleaning utility for Linux that helps you free up disk space by removing temporary files, caches, and other unnecessary data."
+msgstr "المنظف هو أداة تنظيف النظام للينكس تساعدك على تحرير مساحة القرص عن طريق إزالة الملفات المؤقتة والذاكرة المؤقتة والبيانات غير الضرورية الأخرى."
+
+#. Common UI elements
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgid "OK"
+msgstr "موافق"
+
+msgid "Yes"
+msgstr "نعم"
+
+msgid "No"
+msgstr "لا"
+
+msgid "Close"
+msgstr "إغلاق"
+
+msgid "Apply"
+msgstr "تطبيق"
+
+msgid "Save"
+msgstr "حفظ"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "Enable"
+msgstr "تفعيل"
+
+msgid "Disable"
+msgstr "تعطيل"
+
+msgid "Enabled"
+msgstr "مُفعّل"
+
+msgid "Disabled"
+msgstr "مُعطّل"
+
+msgid "Error"
+msgstr "خطأ"
+
+msgid "Warning"
+msgstr "تحذير"
+
+msgid "Information"
+msgstr "معلومات"
+
+msgid "Success"
+msgstr "نجاح"
+
+#. File size units
+msgid "bytes"
+msgstr "بايت"
+
+msgid "KB"
+msgstr "كيلوبايت"
+
+msgid "MB"
+msgstr "ميجابايت"
+
+msgid "GB"
+msgstr "جيجابايت"
+
+msgid "TB"
+msgstr "تيرابايت"
+
+#. Time-related
+msgid "Today"
+msgstr "اليوم"
+
+msgid "Yesterday"
+msgstr "أمس"
+
+msgid "days ago"
+msgstr "أيام مضت"

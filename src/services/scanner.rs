@@ -235,12 +235,29 @@ impl Scanner {
                 };
 
                 let include_dirs = matches!(rule.deletion_mode, DeletionMode::FilesAndDirectories);
-                result.merge(self.scan_directory_with_options(
-                    &path,
-                    include_dirs,
-                    rule.file_pattern.as_deref(),
-                    rule.min_age_days,
-                ));
+
+                if rule.is_subfolder_search() {
+                    let name = rule
+                        .subfolder_name
+                        .as_deref()
+                        .unwrap_or_default()
+                        .trim()
+                        .to_string();
+                    result.merge(self.scan_subfolder_search(
+                        &path,
+                        &name,
+                        include_dirs,
+                        rule.file_pattern.as_deref(),
+                        rule.min_age_days,
+                    ));
+                } else {
+                    result.merge(self.scan_directory_with_options(
+                        &path,
+                        include_dirs,
+                        rule.file_pattern.as_deref(),
+                        rule.min_age_days,
+                    ));
+                }
                 result
             })
             .collect();
@@ -251,6 +268,138 @@ impl Scanner {
         }
         result.cancelled |= self.is_cancelled();
         result
+    }
+
+    /// Scan a rule that searches `root` for subdirectories named `name`
+    /// and treats every match as a cleanup target. With
+    /// `DeletionMode::FilesAndDirectories` each matched folder itself is
+    /// deleted (contents first); with `FilesOnly` only the files inside
+    /// matches are removed and the folder structure is kept.
+    fn scan_subfolder_search(
+        &self,
+        root: &Path,
+        name: &str,
+        include_dirs: bool,
+        file_pattern: Option<&str>,
+        min_age_days: u32,
+    ) -> ScanResult {
+        let mut result = ScanResult::new();
+
+        let root_audit = self.security.audit(root);
+        if !root_audit.is_safe {
+            for violation in root_audit.violations {
+                result.add_security_violation(violation.to_string());
+            }
+            return result;
+        }
+
+        if !root.exists() {
+            result.add_skipped(root.to_path_buf(), "Path does not exist");
+            return result;
+        }
+
+        let matches = self.find_subdirectories_named(root, name);
+        if matches.is_empty() {
+            result.add_skipped(
+                root.to_path_buf(),
+                format!("No subdirectories named '{}' found", name),
+            );
+            return result;
+        }
+
+        let match_results: Vec<ScanResult> = matches
+            .par_iter()
+            .map(|match_path| self.scan_subfolder_match(match_path, include_dirs, file_pattern, min_age_days))
+            .collect();
+
+        for r in match_results {
+            result.merge(r);
+        }
+        result.cancelled |= self.is_cancelled();
+        result
+    }
+
+    fn scan_subfolder_match(
+        &self,
+        match_path: &Path,
+        include_dirs: bool,
+        file_pattern: Option<&str>,
+        min_age_days: u32,
+    ) -> ScanResult {
+        let mut match_result = ScanResult::new();
+
+        let audit = self.security.audit(match_path);
+        if !audit.is_safe {
+            for violation in audit.violations {
+                match_result.add_skipped(match_path.to_path_buf(), violation.to_string());
+            }
+            return match_result;
+        }
+
+        match_result.merge(self.scan_directory_with_options(
+            match_path,
+            include_dirs,
+            file_pattern,
+            min_age_days,
+        ));
+
+        // In FilesAndDirectories mode the matched folder itself is removed
+        // once its contents are gone. The cleaner deletes directories
+        // deepest-first, so adding the folder here is enough for the whole
+        // tree to disappear.
+        if include_dirs && !self.is_cancelled() {
+            let entry_audit = self.security.audit_for_deletion(match_path);
+            if entry_audit.is_safe {
+                let is_symlink = std::fs::symlink_metadata(match_path)
+                    .map(|m| m.file_type().is_symlink())
+                    .unwrap_or(false);
+                match_result.add_directory(FileEntry::new(
+                    match_path.to_path_buf(),
+                    0,
+                    true,
+                    is_symlink,
+                ));
+            } else {
+                for v in entry_audit.violations {
+                    match_result.add_skipped(match_path.to_path_buf(), v.to_string());
+                }
+            }
+        }
+
+        match_result
+    }
+
+    /// Find directories named exactly `name` anywhere below `root`.
+    ///
+    /// The root itself is never considered a match. Directory symlinks are
+    /// neither followed nor matched, so the search cannot escape the tree.
+    /// Once a directory matches, its subtree is not descended into again:
+    /// an outer match already covers any same-named folders inside it.
+    pub fn find_subdirectories_named(&self, root: &Path, name: &str) -> Vec<PathBuf> {
+        let mut matches = Vec::new();
+
+        let mut walker = WalkDir::new(root)
+            .follow_links(false)
+            .min_depth(1)
+            .into_iter();
+
+        while let Some(entry) = walker.next() {
+            if self.is_cancelled() {
+                break;
+            }
+            let Ok(entry) = entry else {
+                continue;
+            };
+            if !entry.file_type().is_dir() {
+                continue;
+            }
+            if entry.file_name().to_string_lossy() == name {
+                matches.push(entry.path().to_path_buf());
+                walker.skip_current_dir();
+            }
+        }
+
+        matches
     }
 
     pub fn scan_system_rules(&self, rules: &[SystemRule]) -> ScanResult {
@@ -814,6 +963,108 @@ mod tests {
         assert!(file_paths.contains(&state_dir.join("root.log")));
         assert!(file_paths.contains(&state_dir.join("app/app.log")));
         assert!(!file_paths.contains(&state_dir.join("root.txt")));
+    }
+
+    #[test]
+    fn subfolder_search_finds_targets_and_covers_their_contents() {
+        let dir = TempDir::new().unwrap();
+        let projects = dir.path().join("Developer");
+        let alpha_target = projects.join("alpha/target");
+        let beta_target = projects.join("nested/beta/target");
+        fs::create_dir_all(alpha_target.join("debug/deps")).unwrap();
+        fs::create_dir_all(&beta_target).unwrap();
+        fs::write(alpha_target.join("debug/deps/app.rlib"), b"rlib").unwrap();
+        fs::write(alpha_target.join("binary"), b"bin").unwrap();
+        fs::write(beta_target.join("artifact.o"), b"obj").unwrap();
+        fs::create_dir_all(projects.join("docs")).unwrap();
+        fs::write(projects.join("docs/readme.md"), b"keep").unwrap();
+
+        let mut rule = CustomRule::new("Build folders", projects.clone());
+        rule.enabled = true;
+        rule.deletion_mode = DeletionMode::FilesAndDirectories;
+        rule.subfolder_name = Some("target".to_string());
+
+        let result = Scanner::new().scan_custom_rules(&[rule]);
+
+        let dir_paths: HashSet<PathBuf> = result
+            .directories
+            .iter()
+            .map(|entry| entry.path.clone())
+            .collect();
+        let file_paths: HashSet<PathBuf> =
+            result.files.iter().map(|entry| entry.path.clone()).collect();
+
+        assert!(dir_paths.contains(&alpha_target));
+        assert!(dir_paths.contains(&beta_target));
+        assert!(dir_paths.contains(&alpha_target.join("debug")));
+        assert!(file_paths.contains(&alpha_target.join("debug/deps/app.rlib")));
+        assert!(file_paths.contains(&beta_target.join("artifact.o")));
+
+        assert!(!dir_paths.contains(&projects.join("docs")));
+        assert!(!file_paths.contains(&projects.join("docs/readme.md")));
+    }
+
+    #[test]
+    fn subfolder_search_files_only_mode_never_lists_directories() {
+        let dir = TempDir::new().unwrap();
+        let projects = dir.path().join("Developer");
+        let target = projects.join("project/target");
+        fs::create_dir_all(target.join("debug")).unwrap();
+        fs::write(target.join("debug/app.rlib"), b"rlib").unwrap();
+
+        let mut rule = CustomRule::new("Build folders", projects);
+        rule.enabled = true;
+        rule.deletion_mode = DeletionMode::FilesOnly;
+        rule.subfolder_name = Some("target".to_string());
+
+        let result = Scanner::new().scan_custom_rules(&[rule]);
+
+        assert_eq!(result.files.len(), 1);
+        assert_eq!(result.files[0].path, target.join("debug/app.rlib"));
+        assert!(result.directories.is_empty());
+    }
+
+    #[test]
+    fn subfolder_search_reports_when_nothing_matches() {
+        let dir = TempDir::new().unwrap();
+        let projects = dir.path().join("Developer");
+        fs::create_dir_all(projects.join("project/src")).unwrap();
+
+        let mut rule = CustomRule::new("Build folders", projects.clone());
+        rule.enabled = true;
+        rule.deletion_mode = DeletionMode::FilesAndDirectories;
+        rule.subfolder_name = Some("target".to_string());
+
+        let result = Scanner::new().scan_custom_rules(&[rule]);
+
+        assert!(result.files.is_empty());
+        assert!(result.directories.is_empty());
+        assert!(result.skipped.iter().any(|(path, reason)| reason
+            .contains("No subdirectories named 'target'")
+            && path.ends_with("Developer")));
+    }
+
+    #[test]
+    fn find_subdirectories_named_prunes_nesting_and_ignores_symlinks() {
+        let dir = TempDir::new().unwrap();
+        let root = dir.path().join("projects");
+        let outer = root.join("one/target");
+        let inner = outer.join("deps/target");
+        fs::create_dir_all(&inner).unwrap();
+        fs::create_dir_all(root.join("two/target")).unwrap();
+        fs::create_dir_all(root.join("three")).unwrap();
+
+        let outside = dir.path().join("outside");
+        fs::create_dir_all(outside.join("target")).unwrap();
+        std::os::unix::fs::symlink(outside.join("target"), root.join("three/target")).unwrap();
+
+        let matches = Scanner::new().find_subdirectories_named(&root, "target");
+
+        assert_eq!(matches.len(), 2);
+        assert!(matches.contains(&outer));
+        assert!(matches.contains(&root.join("two/target")));
+        assert!(!matches.iter().any(|path| path.starts_with(&inner)));
+        assert!(!matches.contains(&root.join("three/target")));
     }
 
     #[test]

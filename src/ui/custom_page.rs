@@ -168,7 +168,22 @@ impl CustomPage {
 
         let expander = adw::ExpanderRow::new();
         expander.set_title(&rule.name);
-        expander.set_subtitle(&rule.path.display().to_string());
+
+        let search_name = rule
+            .subfolder_name
+            .as_deref()
+            .map(str::trim)
+            .filter(|name| !name.is_empty())
+            .map(str::to_string);
+        if let Some(search_name) = &search_name {
+            expander.set_subtitle(&format!(
+                "{} \u{2022} searching subfolders named \"{}\"",
+                rule.path.display(),
+                search_name
+            ));
+        } else {
+            expander.set_subtitle(&rule.path.display().to_string());
+        }
 
         let enabled_row = adw::ActionRow::new();
         enabled_row.set_title("Enabled");
@@ -221,6 +236,17 @@ impl CustomPage {
         mode_row.set_subtitle(rule.deletion_mode.description());
         expander.add_row(&mode_row);
 
+        if let Some(search_name) = &search_name {
+            let search_row = adw::ActionRow::new();
+            search_row.set_title("Subfolder Search");
+            search_row.set_subtitle(&format!(
+                "Rescans \"{}\" for folders named \"{}\" on every scan",
+                rule.path.display(),
+                search_name
+            ));
+            expander.add_row(&search_row);
+        }
+
         if let Some(pattern) = &rule.file_pattern {
             let pattern_row = adw::ActionRow::new();
             pattern_row.set_title("File Pattern");
@@ -263,6 +289,16 @@ impl CustomPage {
         path_group.add(&path_entry);
         content.append(&path_group);
 
+        // Optional subfolder name search (e.g., "target")
+        let search_group = adw::PreferencesGroup::new();
+        search_group.set_description(Some(
+            "Leave empty to clean this exact path. When set, every subfolder with this name is cleaned instead.",
+        ));
+        let search_entry = adw::EntryRow::new();
+        search_entry.set_title("Search Subfolders Named");
+        search_group.add(&search_entry);
+        content.append(&search_group);
+
         // Deletion mode
         let mode_group = adw::PreferencesGroup::new();
         mode_group.set_title("Deletion Mode");
@@ -296,6 +332,7 @@ impl CustomPage {
                 };
                 let name = name_entry.text().to_string();
                 let path = path_entry.text().to_string();
+                let search_name = search_entry.text().trim().to_string();
                 let mode = if files_and_dirs.is_active() {
                     DeletionMode::FilesAndDirectories
                 } else {
@@ -319,14 +356,25 @@ impl CustomPage {
                     let auditor = SecurityAuditor::new();
                     let audit = auditor.audit(&expanded_path);
                     if audit.is_safe {
-                        if Self::is_conventional_cleanup_path(&expanded_path) {
-                            page.add_rule(name, path, mode);
-                        } else {
-                            page.confirm_high_risk_rule(
+                        if search_name.is_empty() {
+                            page.queue_rule_creation(
                                 window_weak.as_ref(),
                                 name,
                                 path,
                                 mode,
+                                None,
+                                &expanded_path,
+                            );
+                        } else {
+                            // Show the user what the search currently
+                            // matches before anything is saved.
+                            page.show_search_preview(
+                                window_weak.as_ref(),
+                                name,
+                                path,
+                                mode,
+                                search_name,
+                                expanded_path,
                             );
                         }
                     } else {
@@ -374,19 +422,133 @@ impl CustomPage {
             .any(|base| path.starts_with(&base) && path != base.as_path())
     }
 
+    /// Route a validated rule either straight to storage (conventional
+    /// cache/temp locations) or through the high-risk confirmation dialog.
+    fn queue_rule_creation(
+        &self,
+        window: Option<&gtk4::Window>,
+        name: String,
+        path: String,
+        mode: DeletionMode,
+        subfolder_name: Option<String>,
+        expanded_path: &std::path::Path,
+    ) {
+        if Self::is_conventional_cleanup_path(expanded_path) {
+            self.add_rule(name, path, mode, subfolder_name);
+        } else {
+            self.confirm_high_risk_rule(window, name, path, mode, subfolder_name);
+        }
+    }
+
+    /// Run the subfolder search once and preview every match before the
+    /// rule is saved. The rule keeps rescanning on each cleanup run, so
+    /// folders created later are still picked up.
+    fn show_search_preview(
+        &self,
+        window: Option<&gtk4::Window>,
+        name: String,
+        path: String,
+        mode: DeletionMode,
+        search_name: String,
+        root: PathBuf,
+    ) {
+        let scanner = crate::services::Scanner::new();
+        let matches = scanner.find_subdirectories_named(&root, &search_name);
+
+        let heading = if matches.is_empty() {
+            "No Matches Yet".to_string()
+        } else {
+            format!("Found {} Match{}", matches.len(), if matches.len() == 1 { "" } else { "es" })
+        };
+        let body = if matches.is_empty() {
+            format!(
+                "No folders named \"{}\" exist under {} right now. The rule will rescan automatically on every cleanup run and will clean any that appear later.",
+                search_name, path
+            )
+        } else {
+            format!(
+                "Folders named \"{}\" under {} will be added to the cleanup list:",
+                search_name, path
+            )
+        };
+
+        let dialog = adw::MessageDialog::new(window, Some(&heading), Some(&body));
+
+        let content = gtk4::Box::new(gtk4::Orientation::Vertical, 6);
+        content.set_margin_top(12);
+        content.set_margin_bottom(12);
+        content.set_margin_start(12);
+        content.set_margin_end(12);
+
+        const PREVIEW_LIMIT: usize = 20;
+        for match_path in matches.iter().take(PREVIEW_LIMIT) {
+            let row_label = gtk4::Label::new(Some(&match_path.display().to_string()));
+            row_label.add_css_class("caption");
+            row_label.add_css_class("monospace");
+            row_label.set_ellipsize(gtk4::pango::EllipsizeMode::Start);
+            row_label.set_halign(gtk4::Align::Start);
+            content.append(&row_label);
+        }
+        if matches.len() > PREVIEW_LIMIT {
+            let more_label =
+                gtk4::Label::new(Some(&format!("\u{2026}and {} more", matches.len() - PREVIEW_LIMIT)));
+            more_label.add_css_class("dim-label");
+            more_label.add_css_class("caption");
+            more_label.set_halign(gtk4::Align::Start);
+            content.append(&more_label);
+        }
+
+        if !matches.is_empty() {
+            dialog.set_extra_child(Some(&content));
+        }
+
+        dialog.add_response("cancel", "Cancel");
+        dialog.add_response("add", "Add Rule");
+        dialog.set_response_appearance("add", adw::ResponseAppearance::Suggested);
+        dialog.set_default_response(Some("add"));
+        dialog.set_close_response("cancel");
+
+        let page = self.downgrade();
+        let window_owned = window.cloned();
+        dialog.connect_response(None, move |_, response| {
+            if response == "add" {
+                if let Some(page) = page.upgrade() {
+                    page.queue_rule_creation(
+                        window_owned.as_ref(),
+                        name.clone(),
+                        path.clone(),
+                        mode,
+                        Some(search_name.clone()),
+                        &root,
+                    );
+                }
+            }
+        });
+        crate::i18n::translate_widget_tree(&dialog);
+        dialog.present();
+    }
+
     fn confirm_high_risk_rule(
         &self,
         window: Option<&gtk4::Window>,
         name: String,
         path: String,
         mode: DeletionMode,
+        subfolder_name: Option<String>,
     ) {
+        let scope_note = match &subfolder_name {
+            Some(search_name) => format!(
+                "The rule searches it for folders named \"{}\" and only those folders are cleaned.",
+                search_name
+            ),
+            None => String::new(),
+        };
         let dialog = adw::MessageDialog::new(
             window,
             Some("High-Risk Custom Location"),
             Some(&format!(
-                "{} is outside the normal cache and temporary-data locations. It may contain projects, documents, virtual machines, or other personal data.\n\nThe rule will be added disabled and must be enabled manually.",
-                path
+                "{} is outside the normal cache and temporary-data locations. It may contain projects, documents, virtual machines, or other personal data. {}\n\nThe rule will be added disabled and must be enabled manually.",
+                path, scope_note
             )),
         );
         dialog.add_response("cancel", "Cancel");
@@ -399,7 +561,7 @@ impl CustomPage {
         dialog.connect_response(None, move |_, response| {
             if response == "add" {
                 if let Some(page) = page.upgrade() {
-                    page.add_rule(name.clone(), path.clone(), mode);
+                    page.add_rule(name.clone(), path.clone(), mode, subfolder_name.clone());
                 }
             }
         });
@@ -407,11 +569,18 @@ impl CustomPage {
         dialog.present();
     }
 
-    fn add_rule(&self, name: String, path: String, mode: DeletionMode) {
+    fn add_rule(
+        &self,
+        name: String,
+        path: String,
+        mode: DeletionMode,
+        subfolder_name: Option<String>,
+    ) {
         let storage = self.imp().storage.borrow().as_ref().unwrap().clone();
 
         let mut rule = CustomRule::new(name, PathBuf::from(path));
         rule.deletion_mode = mode;
+        rule.subfolder_name = subfolder_name.filter(|s| !s.trim().is_empty());
 
         if let Err(e) = storage.update_custom_rules(|rules| {
             rules.push(rule);

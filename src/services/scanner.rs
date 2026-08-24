@@ -270,8 +270,10 @@ impl Scanner {
         result
     }
 
-    /// Scan a rule that searches `root` for subdirectories named `name`
-    /// and treats every match as a cleanup target. With
+    /// Scan a rule that searches `root` for subdirectories whose path
+    /// matches the pattern `name` (a single folder name such as `"target"`
+    /// or a relative path such as `"target/debug"`) and treats every match
+    /// as a cleanup target. With
     /// `DeletionMode::FilesAndDirectories` each matched folder itself is
     /// deleted (contents first); with `FilesOnly` only the files inside
     /// matches are removed and the folder structure is kept.
@@ -298,11 +300,16 @@ impl Scanner {
             return result;
         }
 
-        let matches = self.find_subdirectories_named(root, name);
+        let Some(segments) = Self::parse_subfolder_pattern(name) else {
+            result.add_error(format!("Invalid subfolder search pattern '{}'", name));
+            return result;
+        };
+
+        let matches = self.find_subdirectories_with_segments(root, &segments);
         if matches.is_empty() {
             result.add_skipped(
                 root.to_path_buf(),
-                format!("No subdirectories named '{}' found", name),
+                format!("No subdirectories matching '{}' found", name),
             );
             return result;
         }
@@ -369,18 +376,47 @@ impl Scanner {
         match_result
     }
 
-    /// Find directories named exactly `name` anywhere below `root`.
-    ///
-    /// The root itself is never considered a match. Directory symlinks are
-    /// neither followed nor matched, so the search cannot escape the tree.
-    /// Once a directory matches, its subtree is not descended into again:
-    /// an outer match already covers any same-named folders inside it.
-    pub fn find_subdirectories_named(&self, root: &Path, name: &str) -> Vec<PathBuf> {
+    /// Parse a subfolder search pattern such as `"target"` or
+    /// `"target/debug"` into normalized path segments. Segments are
+    /// trimmed and empty ones (from stray slashes or whitespace) are
+    /// dropped. Returns `None` for patterns without a usable segment or
+    /// that try to traverse (`.` or `..`).
+    pub fn parse_subfolder_pattern(pattern: &str) -> Option<Vec<String>> {
+        let segments: Vec<String> = pattern
+            .split('/')
+            .map(str::trim)
+            .filter(|segment| !segment.is_empty())
+            .map(str::to_string)
+            .collect();
+
+        if segments.is_empty() || segments.iter().any(|segment| segment == "." || segment == "..")
+        {
+            return None;
+        }
+
+        Some(segments)
+    }
+
+    /// Find directories whose path below `root` ends with the given
+    /// pattern, e.g. pattern `"target/debug"` matches
+    /// `root/project-a/target/debug`. The root itself is never considered
+    /// a match. Directory symlinks are neither followed nor matched, so
+    /// the search cannot escape the tree. Once a directory matches, its
+    /// subtree is not descended into again: an outer match already covers
+    /// any same-named folders inside it.
+    pub fn find_matching_subdirectories(&self, root: &Path, pattern: &str) -> Vec<PathBuf> {
+        let Some(segments) = Self::parse_subfolder_pattern(pattern) else {
+            return Vec::new();
+        };
+        self.find_subdirectories_with_segments(root, &segments)
+    }
+
+    fn find_subdirectories_with_segments(&self, root: &Path, segments: &[String]) -> Vec<PathBuf> {
         let mut matches = Vec::new();
 
         let mut walker = WalkDir::new(root)
             .follow_links(false)
-            .min_depth(1)
+            .min_depth(segments.len())
             .into_iter();
 
         while let Some(entry) = walker.next() {
@@ -393,13 +429,34 @@ impl Scanner {
             if !entry.file_type().is_dir() {
                 continue;
             }
-            if entry.file_name().to_string_lossy() == name {
-                matches.push(entry.path().to_path_buf());
-                walker.skip_current_dir();
+            if !Self::directory_matches_pattern(entry.path(), root, segments) {
+                continue;
             }
+            matches.push(entry.path().to_path_buf());
+            walker.skip_current_dir();
         }
 
         matches
+    }
+
+    fn directory_matches_pattern(path: &Path, root: &Path, segments: &[String]) -> bool {
+        let Ok(relative) = path.strip_prefix(root) else {
+            return false;
+        };
+
+        let components: Vec<&std::ffi::OsStr> = relative
+            .components()
+            .map(|component| component.as_os_str())
+            .collect();
+
+        if components.len() < segments.len() {
+            return false;
+        }
+
+        components[components.len() - segments.len()..]
+            .iter()
+            .zip(segments.iter())
+            .all(|(component, segment)| *component == std::ffi::OsStr::new(segment.as_str()))
     }
 
     pub fn scan_system_rules(&self, rules: &[SystemRule]) -> ScanResult {
@@ -1040,12 +1097,79 @@ mod tests {
         assert!(result.files.is_empty());
         assert!(result.directories.is_empty());
         assert!(result.skipped.iter().any(|(path, reason)| reason
-            .contains("No subdirectories named 'target'")
+            .contains("No subdirectories matching 'target'")
             && path.ends_with("Developer")));
     }
 
     #[test]
-    fn find_subdirectories_named_prunes_nesting_and_ignores_symlinks() {
+    fn subfolder_search_supports_nested_patterns_like_target_debug() {
+        let dir = TempDir::new().unwrap();
+        let projects = dir.path().join("Developer");
+
+        let p1_debug = projects.join("p1/target/debug");
+        fs::create_dir_all(p1_debug.join("deps")).unwrap();
+        fs::write(p1_debug.join("deps/app.rlib"), b"rlib").unwrap();
+        fs::create_dir_all(projects.join("p1/target/release")).unwrap();
+        fs::write(projects.join("p1/target/release/app.bin"), b"keep").unwrap();
+
+        let p2_debug = projects.join("p2/target/debug");
+        fs::create_dir_all(&p2_debug).unwrap();
+        fs::write(p2_debug.join("artifact.o"), b"obj").unwrap();
+
+        let bare_debug = projects.join("p3/debug");
+        fs::create_dir_all(&bare_debug).unwrap();
+        fs::write(bare_debug.join("keep.txt"), b"keep").unwrap();
+
+        let mut rule = CustomRule::new("Debug build folders", projects.clone());
+        rule.enabled = true;
+        rule.deletion_mode = DeletionMode::FilesAndDirectories;
+        rule.subfolder_name = Some("target/debug".to_string());
+
+        let result = Scanner::new().scan_custom_rules(&[rule]);
+
+        let dir_paths: HashSet<PathBuf> = result
+            .directories
+            .iter()
+            .map(|entry| entry.path.clone())
+            .collect();
+        let file_paths: HashSet<PathBuf> =
+            result.files.iter().map(|entry| entry.path.clone()).collect();
+
+        assert!(dir_paths.contains(&p1_debug));
+        assert!(dir_paths.contains(&p2_debug));
+        assert!(file_paths.contains(&p1_debug.join("deps/app.rlib")));
+        assert!(file_paths.contains(&p2_debug.join("artifact.o")));
+
+        assert!(!dir_paths.contains(&projects.join("p1/target")));
+        assert!(!dir_paths.contains(&projects.join("p1/target/release")));
+        assert!(!file_paths.contains(&projects.join("p1/target/release/app.bin")));
+        assert!(!dir_paths.contains(&bare_debug));
+        assert!(!file_paths.contains(&bare_debug.join("keep.txt")));
+    }
+
+    #[test]
+    fn subfolder_search_rejects_traversal_patterns() {
+        let dir = TempDir::new().unwrap();
+        let projects = dir.path().join("Developer");
+        fs::create_dir_all(projects.join("project/src")).unwrap();
+
+        let mut rule = CustomRule::new("Escape attempt", projects);
+        rule.enabled = true;
+        rule.deletion_mode = DeletionMode::FilesAndDirectories;
+        rule.subfolder_name = Some("../escape".to_string());
+
+        let result = Scanner::new().scan_custom_rules(&[rule]);
+
+        assert!(result.files.is_empty());
+        assert!(result.directories.is_empty());
+        assert!(result
+            .errors
+            .iter()
+            .any(|error| error.contains("Invalid subfolder search pattern")));
+    }
+
+    #[test]
+    fn find_matching_subdirectories_prunes_nesting_and_ignores_symlinks() {
         let dir = TempDir::new().unwrap();
         let root = dir.path().join("projects");
         let outer = root.join("one/target");
@@ -1058,13 +1182,35 @@ mod tests {
         fs::create_dir_all(outside.join("target")).unwrap();
         std::os::unix::fs::symlink(outside.join("target"), root.join("three/target")).unwrap();
 
-        let matches = Scanner::new().find_subdirectories_named(&root, "target");
+        let scanner = Scanner::new();
+
+        let matches = scanner.find_matching_subdirectories(&root, "target");
 
         assert_eq!(matches.len(), 2);
         assert!(matches.contains(&outer));
         assert!(matches.contains(&root.join("two/target")));
         assert!(!matches.iter().any(|path| path.starts_with(&inner)));
         assert!(!matches.contains(&root.join("three/target")));
+
+        // Nested relative-path patterns only match full suffix chains.
+        let chain = root.join("four/build/target");
+        let chain_debug = chain.join("debug");
+        fs::create_dir_all(&chain_debug).unwrap();
+        fs::create_dir_all(root.join("five/build")).unwrap();
+        fs::create_dir_all(root.join("six/other/build")).unwrap();
+
+        let chain_matches = scanner.find_matching_subdirectories(&root, "build/target");
+        assert_eq!(chain_matches, vec![chain.clone()]);
+        assert_eq!(
+            scanner.find_matching_subdirectories(&root, "target/debug"),
+            vec![chain_debug]
+        );
+
+        // Invalid patterns never match anything.
+        assert!(scanner
+            .find_matching_subdirectories(&root, "..")
+            .is_empty());
+        assert!(scanner.find_matching_subdirectories(&root, "  ").is_empty());
     }
 
     #[test]

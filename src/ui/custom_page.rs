@@ -177,7 +177,7 @@ impl CustomPage {
             .map(str::to_string);
         if let Some(search_name) = &search_name {
             expander.set_subtitle(&format!(
-                "{} \u{2022} searching subfolders named \"{}\"",
+                "{} \u{2022} searching subfolders matching \"{}\"",
                 rule.path.display(),
                 search_name
             ));
@@ -240,7 +240,7 @@ impl CustomPage {
             let search_row = adw::ActionRow::new();
             search_row.set_title("Subfolder Search");
             search_row.set_subtitle(&format!(
-                "Rescans \"{}\" for folders named \"{}\" on every scan",
+                "Rescans \"{}\" for folders matching \"{}\" on every scan",
                 rule.path.display(),
                 search_name
             ));
@@ -289,13 +289,13 @@ impl CustomPage {
         path_group.add(&path_entry);
         content.append(&path_group);
 
-        // Optional subfolder name search (e.g., "target")
+        // Optional subfolder search (e.g., "target" or "target/debug")
         let search_group = adw::PreferencesGroup::new();
         search_group.set_description(Some(
-            "Leave empty to clean this exact path. When set, every subfolder with this name is cleaned instead.",
+            "Leave empty to clean this exact path. When set, every matching subfolder is cleaned instead \u{2014} use a name like \"target\" or a relative path like \"target/debug\".",
         ));
         let search_entry = adw::EntryRow::new();
-        search_entry.set_title("Search Subfolders Named");
+        search_entry.set_title("Search Subfolders Matching");
         search_group.add(&search_entry);
         content.append(&search_group);
 
@@ -453,7 +453,24 @@ impl CustomPage {
         root: PathBuf,
     ) {
         let scanner = crate::services::Scanner::new();
-        let matches = scanner.find_subdirectories_named(&root, &search_name);
+
+        if crate::services::Scanner::parse_subfolder_pattern(&search_name).is_none() {
+            let err_dialog = adw::MessageDialog::new(
+                window,
+                Some("Invalid Folder Pattern"),
+                Some(&format!(
+                    "'{}' is not a valid folder search pattern. Use a folder name such as 'target', a relative path such as 'target/debug', without '.' or '..'.",
+                    search_name
+                )),
+            );
+            err_dialog.add_response("ok", "OK");
+            err_dialog.set_default_response(Some("ok"));
+            crate::i18n::translate_widget_tree(&err_dialog);
+            err_dialog.present();
+            return;
+        }
+
+        let matches = scanner.find_matching_subdirectories(&root, &search_name);
 
         let heading = if matches.is_empty() {
             "No Matches Yet".to_string()
@@ -462,12 +479,12 @@ impl CustomPage {
         };
         let body = if matches.is_empty() {
             format!(
-                "No folders named \"{}\" exist under {} right now. The rule will rescan automatically on every cleanup run and will clean any that appear later.",
+                "No folders matching \"{}\" exist under {} right now. The rule will rescan automatically on every cleanup run and will clean any that appear later.",
                 search_name, path
             )
         } else {
             format!(
-                "Folders named \"{}\" under {} will be added to the cleanup list:",
+                "Folders matching \"{}\" under {} will be added to the cleanup list:",
                 search_name, path
             )
         };
@@ -538,7 +555,7 @@ impl CustomPage {
     ) {
         let scope_note = match &subfolder_name {
             Some(search_name) => format!(
-                "The rule searches it for folders named \"{}\" and only those folders are cleaned.",
+                "The rule searches it for folders matching \"{}\" and only those folders are cleaned.",
                 search_name
             ),
             None => String::new(),

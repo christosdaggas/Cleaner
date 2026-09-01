@@ -123,8 +123,10 @@ impl CustomPage {
         button_box.set_halign(gtk4::Align::Start);
 
         let add_button = gtk4::Button::new();
-        add_button.set_label("Add Directory");
-        add_button.set_icon_name("list-add-symbolic");
+        let add_button_content = gtk4::Box::new(gtk4::Orientation::Horizontal, 6);
+        add_button_content.append(&gtk4::Image::from_icon_name("list-add-symbolic"));
+        add_button_content.append(&gtk4::Label::new(Some("Add Rule")));
+        add_button.set_child(Some(&add_button_content));
         add_button.add_css_class("suggested-action");
 
         let page = self.downgrade();
@@ -149,7 +151,7 @@ impl CustomPage {
         if rules.is_empty() {
             let row = adw::ActionRow::new();
             row.set_title("No custom rules");
-            row.set_subtitle("Click 'Add Directory' to create one");
+            row.set_subtitle("Click 'Add Rule' to create one");
             row.add_css_class("dim-label");
             group.add(&row);
         } else {
@@ -265,14 +267,43 @@ impl CustomPage {
     }
 
     fn show_add_dialog(&self) {
-        let window = self.root().and_then(|r| r.downcast::<gtk4::Window>().ok());
-        let dialog = adw::MessageDialog::new(window.as_ref(), Some("Add Custom Rule"), None);
+        let parent_window = self.root().and_then(|r| r.downcast::<gtk4::Window>().ok());
+        let form_window = gtk4::Window::builder()
+            .title("Add Custom Rule")
+            .default_width(580)
+            .default_height(620)
+            .resizable(true)
+            .modal(false)
+            .build();
+        if let Some(application) = parent_window
+            .as_ref()
+            .and_then(|window| window.application())
+        {
+            form_window.set_application(Some(&application));
+        }
+
+        let header = adw::HeaderBar::new();
+        header.add_css_class("custom-rule-header");
+        let title = adw::WindowTitle::new("Add Custom Rule", "");
+        header.set_title_widget(Some(&title));
+
+        let cancel_button = gtk4::Button::with_label("Cancel");
+        let form_window_weak = form_window.downgrade();
+        cancel_button.connect_clicked(move |_| {
+            if let Some(form_window) = form_window_weak.upgrade() {
+                form_window.close();
+            }
+        });
+
+        let add_button = gtk4::Button::with_label("Add Rule");
+        add_button.add_css_class("suggested-action");
+        form_window.set_titlebar(Some(&header));
 
         let content = gtk4::Box::new(gtk4::Orientation::Vertical, 12);
-        content.set_margin_top(12);
-        content.set_margin_bottom(12);
-        content.set_margin_start(12);
-        content.set_margin_end(12);
+        content.set_margin_top(18);
+        content.set_margin_bottom(18);
+        content.set_margin_start(18);
+        content.set_margin_end(18);
 
         // Name entry
         let name_group = adw::PreferencesGroup::new();
@@ -286,6 +317,44 @@ impl CustomPage {
         let path_entry = adw::EntryRow::new();
         path_entry.set_title("Directory Path");
         path_entry.set_text("~/");
+
+        let choose_path_button = gtk4::Button::from_icon_name("folder-open-symbolic");
+        choose_path_button.add_css_class("flat");
+        choose_path_button.set_valign(gtk4::Align::Center);
+        choose_path_button.set_tooltip_text(Some("Choose a directory"));
+        path_entry.add_suffix(&choose_path_button);
+
+        let form_window_weak = form_window.downgrade();
+        let path_entry_for_picker = path_entry.clone();
+        choose_path_button.connect_clicked(move |_| {
+            let Some(form_window) = form_window_weak.upgrade() else {
+                return;
+            };
+            let chooser = gtk4::FileChooserNative::new(
+                Some("Choose a Directory"),
+                Some(&form_window),
+                gtk4::FileChooserAction::SelectFolder,
+                Some("Select"),
+                Some("Cancel"),
+            );
+
+            if let Some(current_path) =
+                Self::expand_custom_path(path_entry_for_picker.text().as_str())
+            {
+                let _ = chooser.set_current_folder(Some(&gtk4::gio::File::for_path(current_path)));
+            }
+
+            let path_entry = path_entry_for_picker.clone();
+            chooser.run_async(move |chooser, response| {
+                if response == gtk4::ResponseType::Accept {
+                    if let Some(path) = chooser.file().and_then(|file| file.path()) {
+                        path_entry.set_text(&Self::display_custom_path(&path));
+                    }
+                }
+                chooser.destroy();
+            });
+        });
+
         path_group.add(&path_entry);
         content.append(&path_group);
 
@@ -313,105 +382,134 @@ impl CustomPage {
 
         content.append(&mode_group);
 
-        dialog.set_extra_child(Some(&content));
+        let scrolled = gtk4::ScrolledWindow::builder()
+            .hscrollbar_policy(gtk4::PolicyType::Never)
+            .vexpand(true)
+            .child(&content)
+            .build();
 
-        dialog.add_response("cancel", "Cancel");
-        dialog.add_response("add", "Add");
-        dialog.set_response_appearance("add", adw::ResponseAppearance::Suggested);
-        dialog.set_default_response(Some("add"));
-        dialog.set_close_response("cancel");
+        let window_content = gtk4::Box::new(gtk4::Orientation::Vertical, 0);
+        window_content.append(&scrolled);
+
+        let actions = gtk4::Box::new(gtk4::Orientation::Horizontal, 8);
+        actions.set_hexpand(true);
+        actions.set_margin_top(12);
+        actions.set_margin_bottom(12);
+        actions.set_margin_start(18);
+        actions.set_margin_end(18);
+        actions.append(&cancel_button);
+
+        let action_spacer = gtk4::Box::new(gtk4::Orientation::Horizontal, 0);
+        action_spacer.set_hexpand(true);
+        actions.append(&action_spacer);
+        actions.append(&add_button);
+        window_content.append(&actions);
+
+        form_window.set_child(Some(&window_content));
+        form_window.set_default_widget(Some(&add_button));
 
         let page = self.downgrade();
-        let window_weak = window
-            .as_ref()
-            .and_then(|window| window.clone().downcast::<gtk4::Window>().ok());
-        dialog.connect_response(None, move |_: &adw::MessageDialog, response| {
-            if response == "add" {
-                let Some(page) = page.upgrade() else {
-                    return;
-                };
-                let name = name_entry.text().to_string();
-                let path = path_entry.text().to_string();
-                let search_name = search_entry.text().trim().to_string();
-                let mode = if files_and_dirs.is_active() {
-                    DeletionMode::FilesAndDirectories
-                } else {
-                    DeletionMode::FilesOnly
-                };
+        let form_window_weak = form_window.downgrade();
+        let name_entry_for_add = name_entry.clone();
+        add_button.connect_clicked(move |_| {
+            let Some(page) = page.upgrade() else {
+                return;
+            };
+            let name = name_entry_for_add.text().to_string();
+            let path = path_entry.text().to_string();
+            let search_name = search_entry.text().trim().to_string();
+            let mode = if files_and_dirs.is_active() {
+                DeletionMode::FilesAndDirectories
+            } else {
+                DeletionMode::FilesOnly
+            };
 
-                if name.is_empty() || path.is_empty() {
-                    return;
-                }
+            if name.is_empty() || path.is_empty() {
+                return;
+            }
 
-                // Expand ~ and validate path through security auditor
-                let expanded = if path.starts_with("~/") {
-                    dirs::home_dir().map(|home| home.join(&path[2..]))
-                } else if path == "~" {
-                    dirs::home_dir()
-                } else {
-                    Some(PathBuf::from(&path))
-                };
-
-                if let Some(expanded_path) = expanded {
-                    let auditor = SecurityAuditor::new();
-                    let audit = auditor.audit(&expanded_path);
-                    if audit.is_safe {
-                        if search_name.is_empty() {
-                            page.queue_rule_creation(
-                                window_weak.as_ref(),
-                                name,
-                                path,
-                                mode,
-                                None,
-                                &expanded_path,
-                            );
-                        } else {
-                            // Show the user what the search currently
-                            // matches before anything is saved.
-                            page.show_search_preview(
-                                window_weak.as_ref(),
-                                name,
-                                path,
-                                mode,
-                                search_name,
-                                expanded_path,
-                            );
-                        }
-                    } else {
-                        let reason = audit
-                            .violations
-                            .first()
-                            .map(|v| v.to_string())
-                            .unwrap_or_else(|| "Path is not safe for cleanup".to_string());
-                        let err_dialog = adw::MessageDialog::new(
-                            window_weak.as_ref(),
-                            Some("Invalid Path"),
-                            Some(&format!(
-                                "The path '{}' is not allowed:\n{}",
-                                path, reason
-                            )),
+            if let Some(expanded_path) = Self::expand_custom_path(&path) {
+                let auditor = SecurityAuditor::new();
+                let audit = auditor.audit(&expanded_path);
+                if audit.is_safe {
+                    if let Some(form_window) = form_window_weak.upgrade() {
+                        form_window.close();
+                    }
+                    if search_name.is_empty() {
+                        page.queue_rule_creation(
+                            parent_window.as_ref(),
+                            name,
+                            path,
+                            mode,
+                            None,
+                            &expanded_path,
                         );
-                        err_dialog.add_response("ok", "OK");
-                        err_dialog.set_default_response(Some("ok"));
-                        crate::i18n::translate_widget_tree(&err_dialog);
-                        err_dialog.present();
+                    } else {
+                        page.show_search_preview(
+                            parent_window.as_ref(),
+                            name,
+                            path,
+                            mode,
+                            search_name,
+                            expanded_path,
+                        );
                     }
                 } else {
+                    let reason = audit
+                        .violations
+                        .first()
+                        .map(|v| v.to_string())
+                        .unwrap_or_else(|| "Path is not safe for cleanup".to_string());
+                    let error_parent = form_window_weak.upgrade();
                     let err_dialog = adw::MessageDialog::new(
-                        window_weak.as_ref(),
+                        error_parent.as_ref(),
                         Some("Invalid Path"),
-                        Some("Could not expand home directory in path."),
+                        Some(&format!("The path '{}' is not allowed:\n{}", path, reason)),
                     );
                     err_dialog.add_response("ok", "OK");
                     err_dialog.set_default_response(Some("ok"));
                     crate::i18n::translate_widget_tree(&err_dialog);
                     err_dialog.present();
                 }
+            } else {
+                let error_parent = form_window_weak.upgrade();
+                let err_dialog = adw::MessageDialog::new(
+                    error_parent.as_ref(),
+                    Some("Invalid Path"),
+                    Some("Could not expand home directory in path."),
+                );
+                err_dialog.add_response("ok", "OK");
+                err_dialog.set_default_response(Some("ok"));
+                crate::i18n::translate_widget_tree(&err_dialog);
+                err_dialog.present();
             }
         });
 
-        crate::i18n::translate_widget_tree(&dialog);
-        dialog.present();
+        crate::i18n::translate_widget_tree(&form_window);
+        form_window.present();
+        name_entry.grab_focus();
+    }
+
+    fn expand_custom_path(path: &str) -> Option<PathBuf> {
+        if let Some(relative) = path.strip_prefix("~/") {
+            dirs::home_dir().map(|home| home.join(relative))
+        } else if path == "~" {
+            dirs::home_dir()
+        } else {
+            Some(PathBuf::from(path))
+        }
+    }
+
+    fn display_custom_path(path: &std::path::Path) -> String {
+        if let Some(home) = dirs::home_dir() {
+            if path == home {
+                return "~/".to_string();
+            }
+            if let Ok(relative) = path.strip_prefix(home) {
+                return format!("~/{}", relative.display());
+            }
+        }
+        path.display().to_string()
     }
 
     fn is_conventional_cleanup_path(path: &std::path::Path) -> bool {

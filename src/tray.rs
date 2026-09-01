@@ -373,7 +373,9 @@ mod tests {
     /// alpha is fully opaque, returned as (r, g, b) from the ARGB32 buffer.
     fn first_opaque_pixel(icon: &ksni::Icon) -> Option<(u8, u8, u8)> {
         icon.data
-            .chunks_exact(4)
+            .as_chunks::<4>()
+            .0
+            .iter()
             .find(|px| px[0] == 0xff)
             .map(|px| (px[1], px[2], px[3]))
     }

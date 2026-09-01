@@ -682,6 +682,7 @@ impl DashboardPage {
 
         // Buttons container
         let buttons_box = gtk4::Box::new(gtk4::Orientation::Horizontal, 12);
+        buttons_box.add_css_class("dashboard-action-buttons");
         buttons_box.set_valign(gtk4::Align::Center);
 
         // Scan button (comes first)

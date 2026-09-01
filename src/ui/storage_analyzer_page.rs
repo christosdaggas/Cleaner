@@ -286,9 +286,14 @@ impl StorageAnalyzerPage {
         selection_copy.append(&selected_size_label);
         bottom_bar.append(&selection_copy);
 
-        let trash_button = gtk4::Button::with_label("Move Selected to Trash");
-        trash_button.set_icon_name("user-trash-symbolic");
+        let trash_button = gtk4::Button::new();
+        let trash_button_content = gtk4::Box::new(gtk4::Orientation::Horizontal, 6);
+        trash_button_content.append(&gtk4::Image::from_icon_name("user-trash-symbolic"));
+        trash_button_content.append(&gtk4::Label::new(Some("Delete Selected")));
+        trash_button.set_child(Some(&trash_button_content));
         trash_button.add_css_class("destructive-action");
+        trash_button.add_css_class("storage-delete-button");
+        trash_button.set_valign(gtk4::Align::Center);
         trash_button.set_sensitive(false);
         let page = self.downgrade();
         trash_button.connect_clicked(move |_| {

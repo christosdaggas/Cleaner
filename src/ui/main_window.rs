@@ -153,7 +153,7 @@ impl MainWindow {
             .property("application", app)
             .property("title", crate::APP_NAME)
             .property("default-width", 1060)
-            .property("default-height", 660)
+            .property("default-height", 680)
             .build();
 
         window.imp().storage.replace(Some(storage));

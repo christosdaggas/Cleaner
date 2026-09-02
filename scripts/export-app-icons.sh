@@ -71,8 +71,10 @@ colour = f"""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 # --- symbolic --------------------------------------------------------------
 # Fraction of the canvas the glyph fills. Tray panels leave no padding of their
 # own, so the artwork is inset here instead: the viewBox is grown around its
-# centre, which shrinks the drawing without touching any path data.
-SYMBOLIC_SCALE = 0.85
+# centre, which shrinks the drawing without touching any path data. GNOME's
+# own symbolic icons span 14 of their 16 px, so the eraser (which fills 92.6%
+# of symbolic-icon.svg) is scaled to match: 0.875 / 0.926.
+SYMBOLIC_SCALE = 0.945
 
 sym_view_box, sym_inner = load("symbolic-icon.svg")
 

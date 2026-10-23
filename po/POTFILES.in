@@ -1,0 +1,16 @@
+src/main.rs
+src/application.rs
+src/storage.rs
+src/ui/main_window.rs
+src/ui/dashboard_page.rs
+src/ui/browsers_page.rs
+src/ui/applications_page.rs
+src/ui/custom_page.rs
+src/ui/system_page.rs
+src/ui/settings_page.rs
+src/ui/storage_analyzer_page.rs
+src/ui/diagnostics_page.rs
+src/ui/help_page.rs
+src/ui/cleanup_log_page.rs
+data/com.chrisdaggas.datacleaner.desktop
+data/com.chrisdaggas.datacleaner.metainfo.xml

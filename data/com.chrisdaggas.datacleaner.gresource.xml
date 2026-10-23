@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/chrisdaggas/datacleaner">
+    <file>style.css</file>
+    <file>icons/browsers/firefox.svg</file>
+    <file>icons/browsers/chrome.svg</file>
+    <file>icons/browsers/chromium.svg</file>
+    <file>icons/browsers/brave.svg</file>
+    <file>icons/browsers/edge.svg</file>
+    <file>icons/browsers/opera.svg</file>
+    <file>icons/browsers/vivaldi.svg</file>
+    <file>icons/browsers/yandex.svg</file>
+    <file>icons/browsers/duckduckgo.svg</file>
+  </gresource>
+</gresources>

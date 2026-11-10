@@ -97,26 +97,22 @@ pub struct Storage {
 
 impl Storage {
     pub fn new() -> Self {
-        let config_dir = match dirs::config_dir() {
-            Some(dir) => {
-                let current = dir.join(CONFIG_DIR_NAME);
-                Self::migrate_legacy_config(&dir.join(LEGACY_CONFIG_DIR_NAME), &current);
+        let config_dir = match dirs::home_dir() {
+            Some(home) => {
+                let base = home.join(".local/share/daggas");
+                let current = base.join(CONFIG_DIR_NAME);
+                Self::migrate_legacy_config(
+                    &home.join(".config").join(LEGACY_CONFIG_DIR_NAME),
+                    &current,
+                );
                 current
             }
-            None => match dirs::home_dir() {
-                Some(home) => {
-                    warn!("Config directory not available; falling back to ~/.data-cleaner");
-                    let current = home.join(".data-cleaner");
-                    Self::migrate_legacy_config(&home.join(".cleaner"), &current);
-                    current
-                }
-                None => {
-                    warn!("Config directory and home directory not available; falling back to current directory .data-cleaner");
-                    let current = PathBuf::from(".data-cleaner");
-                    Self::migrate_legacy_config(&PathBuf::from(".cleaner"), &current);
-                    current
-                }
-            },
+            None => {
+                warn!("Home directory not available; falling back to current directory .data-cleaner");
+                let current = PathBuf::from(".data-cleaner");
+                Self::migrate_legacy_config(&PathBuf::from(".cleaner"), &current);
+                current
+            }
         };
 
         if !config_dir.exists() {

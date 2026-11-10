@@ -388,8 +388,8 @@ impl DiagnosticsPage {
         }
 
         // App config directory
-        let app_config = dirs::config_dir()
-            .map(|p| p.join("data-cleaner"))
+        let app_config = dirs::home_dir()
+            .map(|p| p.join(".local/share/daggas").join("data-cleaner"))
             .unwrap_or_default();
         let app_config_str = app_config.display().to_string();
         let app_row = adw::ActionRow::builder()
